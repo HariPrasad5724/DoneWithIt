@@ -17,11 +17,6 @@ function WelcomeScreen({ navigation }) {
       </View>
       <View style={styles.buttonsContainer}>
         <AppButton
-          title="Tutor Login"
-          color="tomato"
-          onPress={() => navigation.navigate("Staff_Login")}
-        />
-        <AppButton
           title="Student Login"
           color="dodgerblue"
           onPress={() => navigation.navigate("Student_Login")}

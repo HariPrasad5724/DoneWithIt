@@ -1,21 +1,16 @@
 import React from "react";
 import { Formik } from "formik";
-import {
-  TouchableOpacity,
-  View,
-  StyleSheet,
-  Text,
-  Image,
-  TextInput,
-} from "react-native";
+import { View, StyleSheet, Image } from "react-native";
 import ErrorMessage from "./ErrorMessage";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
 import * as Yup from "yup";
+import AppButton from "../component/AppButton";
+import AppTextInput from "../component/AppTextInput";
 
 const validationSchema = Yup.object().shape({
   email: Yup.string().required().email().label("Email"),
   password: Yup.string().required().min(4).label("Password"),
 });
+
 function Student_Login(props) {
   return (
     <View style={styles.container}>
@@ -32,15 +27,9 @@ function Student_Login(props) {
       >
         {({ handleChange, handleSubmit, errors, touched, setFieldTouched }) => (
           <>
-            <View style={styles.radiusDef}>
-              <MaterialCommunityIcons
-                style={styles.icon}
-                size={20}
-                color="black"
-                name="email"
-              />
-              <TextInput
-                style={styles.textInput}
+            <View>
+              <AppTextInput
+                icon="email"
                 placeholder="Email"
                 autoCapitalize="none"
                 placeholderTextColor="gray"
@@ -52,16 +41,9 @@ function Student_Login(props) {
               />
               <ErrorMessage error={errors.email} visible={touched.email} />
             </View>
-
-            <View style={styles.radiusDef}>
-              <MaterialCommunityIcons
-                style={styles.icon}
-                size={20}
-                color="black"
-                name="lock"
-              />
-              <TextInput
-                style={styles.textInput}
+            <View>
+              <AppTextInput
+                icon="lock"
                 autoCapitalize="none"
                 placeholderTextColor="gray"
                 placeholder="Password"
@@ -72,24 +54,20 @@ function Student_Login(props) {
                 keyboardType="default"
                 secureTextEntry={true}
               />
-
               <ErrorMessage
                 error={errors.password}
                 visible={touched.password}
               />
             </View>
 
-            <View style={{ paddingTop: 50 }}>
-              <TouchableOpacity
-                style={styles.button}
-                onPress={
-                  (handleSubmit,
-                  () => props.navigation.navigate("Student_Portal"))
-                }
-              >
-                <Text style={styles.text}>Login</Text>
-              </TouchableOpacity>
-            </View>
+            <AppButton
+              title="Login"
+              onPress={
+                (handleSubmit,
+                () => props.navigation.navigate("Student_Portal"))
+              }
+              color="dodgerblue"
+            />
           </>
         )}
       </Formik>
@@ -99,44 +77,15 @@ function Student_Login(props) {
 const styles = StyleSheet.create({
   container: {
     padding: 10,
-    backgroundColor: "#3b5998",
+    backgroundColor: "#eee",
+    flex: 1,
   },
   logo: {
-    width: 80,
-    height: 70,
+    width: 100,
+    height: 100,
     alignSelf: "center",
     marginTop: 30,
     marginBottom: 20,
-  },
-  icon: {
-    paddingTop: 10,
-    paddingLeft: 20,
-  },
-  textInput: {
-    fontSize: 18,
-    paddingLeft: 60,
-    color: "black",
-  },
-  text: {
-    color: "white",
-    fontSize: 25,
-  },
-  button: {
-    backgroundColor: "tomato",
-    justifyContent: "center",
-    borderRadius: 20,
-    alignItems: "center",
-    paddingTop: 10,
-    width: "100%",
-    paddingEnd: 15,
-    marginVertical: 25,
-  },
-  radiusDef: {
-    marginTop: 30,
-    paddingTop: 10,
-    borderRadius: 80,
-    paddingLeft: 30,
-    backgroundColor: "white",
   },
 });
 export default Student_Login;

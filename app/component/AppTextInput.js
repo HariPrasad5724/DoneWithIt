@@ -1,22 +1,23 @@
 import React from "react";
 import { TextInput, View, StyleSheet } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-function AppTextInput(props) {
+function AppTextInput({ icon, maxLength, placeholder, ...others }) {
   return (
     <View style={styles.container}>
-      {props.icon && (
+      {icon && (
         <MaterialCommunityIcons
           style={styles.icon}
-          size={20}
+          size={30}
           color="black"
-          name={props.icon}
+          name={icon}
         />
       )}
       <TextInput
         placeholderTextColor="black"
         style={styles.textInput}
-        placeholder={props.placeholder}
-        maxLength={props.maxLength}
+        placeholder={placeholder}
+        maxLength={maxLength}
+        {...others}
       />
     </View>
   );
@@ -24,11 +25,13 @@ function AppTextInput(props) {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: "white",
-    borderRadius: 25,
+    borderRadius: 50,
     flexDirection: "row",
     width: "100%",
+    height: 70,
     padding: 15,
     marginVertical: 40,
+    alignItems: "center",
   },
   icon: {
     marginRight: 10,
