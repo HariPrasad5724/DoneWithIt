@@ -17,9 +17,11 @@ function Card(props) {
         <View style={styles.card}>
           {props.IconComponent}
           {/* {props.image && <Image style={styles.image} source={props.image} />} */}
+          {/* {props.image && <Image style={styles.image} source={props.image} />} */}
+
           <View style={styles.detailsContainer}>
             <AppText style={styles.title} title={props.title} />
-            <AppText style={styles.subtitle} title={props.subtitle} />
+            {props.subtitle && <AppText style={styles.subtitle} title={props.subtitle} />}
           </View>
         </View>
       </TouchableOpacity>
