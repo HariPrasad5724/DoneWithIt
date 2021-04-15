@@ -14,7 +14,8 @@ export default class SearchStudent extends Component {
 
     this.state = {
       isLoading: true,
-      text: "",
+      roll_no: "",
+      document_name: "",
       data: getStudents(),
     };
 
@@ -33,16 +34,30 @@ export default class SearchStudent extends Component {
     );
   }
 
-  searchData(text) {
+  searchDataWithRoll(roll_no) {
     const newData = this.arrayholder.filter((item) => {
       const itemRoll = item.register_number.toString();
-      const textRoll = text.toString();
-      return itemRoll.indexOf(textRoll) > -1;
+      const textRoll = roll_no.toString();
+      const student = itemRoll.indexOf(textRoll) > -1;
+      return student;
     });
 
     this.setState({
       data: newData,
-      text,
+      roll_no,
+    });
+  }
+
+  searchDataWithDocname(document_name) {
+    const newData = this.arrayholder.filter((item) => {
+      const itemDocs = item.document_name;
+      const textDocs = document_name.toString();
+      const student = itemDocs.indexOf(textDocs) > -1;
+      return student;
+    });
+    this.setState({
+      data: newData,
+      document_name,
     });
   }
 
@@ -71,10 +86,19 @@ export default class SearchStudent extends Component {
       <View style={styles.MainContainer}>
         <TextInput
           style={styles.textInput}
-          onChangeText={(text) => this.searchData(text)}
-          value={this.state.text}
+          onChangeText={(roll_no) => this.searchDataWithRoll(roll_no)}
+          value={this.state.roll_no}
           underlineColorAndroid="transparent"
           placeholder="Enter the Roll no of the Student"
+        />
+        <TextInput
+          style={styles.textInput}
+          onChangeText={(document_name) =>
+            this.searchDataWithDocname(document_name)
+          }
+          value={this.state.document_name}
+          underlineColorAndroid="transparent"
+          placeholder="Enter the Document Name"
         />
 
         <FlatList
@@ -99,7 +123,7 @@ const styles = StyleSheet.create({
   MainContainer: {
     justifyContent: "center",
     flex: 1,
-    marginTop: 40,
+    marginTop: 10,
   },
 
   row: {
@@ -114,5 +138,6 @@ const styles = StyleSheet.create({
     borderColor: "#009688",
     borderRadius: 8,
     backgroundColor: "#FFFF",
+    marginTop: 20,
   },
 });
