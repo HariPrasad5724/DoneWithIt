@@ -9,6 +9,7 @@ import Student_Login from "../screens/Student_Login";
 import Student_Portal from "../screens/Student_Portal";
 import PersonalDocs from "../screens/PersonalDocs";
 import Staff_Portal from "../screens/Staff_Portal";
+import ListStudents from "../screens/ListStudents";
 const Stack = createStackNavigator();
 
 export default function LoginNavigation(props) {
@@ -23,6 +24,7 @@ export default function LoginNavigation(props) {
         <Stack.Screen name="Student_Portal" component={Student_Portal} />
         <Stack.Screen name="Staff_Portal" component={Staff_Portal} />
         <Stack.Screen name="Personal_Docs" component={PersonalDocs} />
+        <Stack.Screen name="ListStudents" component={ListStudents} />
       </Stack.Navigator>
     </NavigationContainer>
   );
