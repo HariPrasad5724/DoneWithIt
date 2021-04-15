@@ -8,6 +8,7 @@ const Users = [
     batch: "18MSS",
     documents: "url of the doc",
     document_name: "medical",
+    date_of_sub: "05-05-2020",
   },
   {
     _id: "222",
@@ -18,6 +19,7 @@ const Users = [
     batch: "18MSS",
     documents: "url of the doc",
     document_name: "hackathon",
+    date_of_sub: "09-06-2020",
   },
   {
     _id: "333",
@@ -28,6 +30,7 @@ const Users = [
     batch: "18MSS",
     documents: "url of the doc",
     document_name: "bonafide",
+    date_of_sub: "12-08-2020",
   },
   {
     _id: "444",
@@ -38,6 +41,7 @@ const Users = [
     batch: "18MSS",
     documents: "url of the doc",
     document_name: "bonafide",
+    date_of_sub: "02-06-2020",
   },
   {
     _id: "555",
@@ -48,6 +52,7 @@ const Users = [
     batch: "18MSS",
     documents: "url of the doc",
     document_name: "hackathon",
+    date_of_sub: "01-07-2020",
   },
 ];
 

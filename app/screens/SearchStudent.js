@@ -16,6 +16,7 @@ export default class SearchStudent extends Component {
       isLoading: true,
       roll_no: "",
       document_name: "",
+      date_of_sub: "",
       data: getStudents(),
     };
 
@@ -48,13 +49,28 @@ export default class SearchStudent extends Component {
     });
   }
 
+  /* searchDataWithDateOfSubmission(date_of_sub) {
+    const newData = this.arrayholder.filter((item) => {
+      const itemDocs = item.date_of_sub.toString();
+      const textDocs = date_of_sub.toString();
+      const students = itemDocs.indexOf(textDocs) > -1;
+      return students;
+    });
+
+    this.setState({
+      data: newData,
+      document_name,
+    });
+  }*/
+
   searchDataWithDocname(document_name) {
     const newData = this.arrayholder.filter((item) => {
       const itemDocs = item.document_name;
       const textDocs = document_name.toString();
-      const student = itemDocs.indexOf(textDocs) > -1;
-      return student;
+      const students = itemDocs.indexOf(textDocs) > -1;
+      return students;
     });
+
     this.setState({
       data: newData,
       document_name,
@@ -86,6 +102,7 @@ export default class SearchStudent extends Component {
       <View style={styles.MainContainer}>
         <TextInput
           style={styles.textInput}
+          keyboardType="number-pad"
           onChangeText={(roll_no) => this.searchDataWithRoll(roll_no)}
           value={this.state.roll_no}
           underlineColorAndroid="transparent"
@@ -100,7 +117,6 @@ export default class SearchStudent extends Component {
           underlineColorAndroid="transparent"
           placeholder="Enter the Document Name"
         />
-
         <FlatList
           data={this.state.data}
           keyExtractor={(item, index) => index.toString()}
