@@ -16,7 +16,7 @@ function Staff_Portal(props) {
           title="Search Student"
           subtitle="Students OD Docs can be searched based on their Reg no and Date wise"
           image={require("../../assets/logo-red.png")}
-          onPress={() => props.navigation.navigate("OD_Form")}
+          onPress={() => props.navigation.navigate("Search_Student")}
         ></Card>
       </View>
     </ScrollView>
