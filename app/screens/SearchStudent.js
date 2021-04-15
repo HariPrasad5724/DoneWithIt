@@ -6,6 +6,7 @@ import {
   View,
   TextInput,
 } from "react-native";
+import { getStudents } from "../api/fakeStudentApi";
 import Card from "../component/Card";
 export default class SearchStudent extends Component {
   constructor(props) {
@@ -14,36 +15,29 @@ export default class SearchStudent extends Component {
     this.state = {
       isLoading: true,
       text: "",
-      data: [],
+      data: getStudents(),
     };
 
     this.arrayholder = [];
   }
 
   componentDidMount() {
-    return fetch("https://jsonplaceholder.typicode.com/users")
-      .then((response) => response.json())
-      .then((responseJson) => {
-        this.setState(
-          {
-            isLoading: false,
-            data: responseJson,
-          },
-          () => {
-            this.arrayholder = responseJson;
-          }
-        );
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+    return this.setState(
+      {
+        isLoading: false,
+        data: getStudents(),
+      },
+      () => {
+        this.arrayholder = this.state.data;
+      }
+    );
   }
 
   searchData(text) {
     const newData = this.arrayholder.filter((item) => {
-      const itemData = item.name.toUpperCase();
-      const textData = text.toUpperCase();
-      return itemData.indexOf(textData) > -1;
+      const itemRoll = item.register_number.toString();
+      const textRoll = text.toString();
+      return itemRoll.indexOf(textRoll) > -1;
     });
 
     this.setState({
@@ -89,8 +83,8 @@ export default class SearchStudent extends Component {
           ItemSeparatorComponent={this.itemSeparator}
           renderItem={({ item }) => (
             <Card
-              title={item.name}
-              subtitle={item.email}
+              title={item.register_number}
+              subtitle={item.name}
               onPress={() => console.log("Clicked ", item.name)}
             />
           )}
