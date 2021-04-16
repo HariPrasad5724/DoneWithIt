@@ -7,6 +7,6 @@ function ErrorMessage(props) {
 }
 
 const styles = StyleSheet.create({
-  error: { color: "red", paddingLeft: 50 },
+  error: { color: "red", fontSize: 18, fontWeight: "500" },
 });
 export default ErrorMessage;

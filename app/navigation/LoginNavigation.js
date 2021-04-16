@@ -10,8 +10,9 @@ import Student_Portal from "../screens/Student_Portal";
 import PersonalDocs from "../screens/PersonalDocs";
 import Staff_Portal from "../screens/Staff_Portal";
 import SearchStudent from "../screens/SearchStudent";
-import DisplayDocs from "../screens/DisplayDocs";
 import ListStudents from "../screens/ListStudents";
+import DisplayDocs from "../screens/DisplayDocs";
+
 const Stack = createStackNavigator();
 
 export default function LoginNavigation(props) {

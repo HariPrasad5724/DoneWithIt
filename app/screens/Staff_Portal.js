@@ -4,7 +4,7 @@ import Card from "../component/Card";
 function Staff_Portal(props) {
   return (
     <ScrollView>
-      <View style={{ backgroundColor: "tomato" }}>
+      <View style={{ backgroundColor: "#fff", flex: 1 }}>
         <Card
           title="View Students"
           subtitle="The personal documents of the student can be accessed here"

@@ -17,14 +17,12 @@ function WelcomeScreen({ navigation }) {
       </View>
       <View style={styles.buttonsContainer}>
         <AppButton
-          title="Tutor Login"
-          color="tomato"
-          onPress={() => navigation.navigate("Staff_Login")}
+          title="Student Login"
+          onPress={() => navigation.navigate("Student_Login")}
         />
         <AppButton
-          title="Student Login"
-          color="dodgerblue"
-          onPress={() => navigation.navigate("Student_Login")}
+          title="Staff Login"
+          onPress={() => navigation.navigate("Staff_Login")}
         />
       </View>
     </ImageBackground>
