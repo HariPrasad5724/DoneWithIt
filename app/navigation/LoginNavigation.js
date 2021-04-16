@@ -9,11 +9,9 @@ import Student_Login from "../screens/Student_Login";
 import Student_Portal from "../screens/Student_Portal";
 import PersonalDocs from "../screens/PersonalDocs";
 import Staff_Portal from "../screens/Staff_Portal";
-<<<<<<< HEAD
-import ListStudents from "../screens/ListStudents";
-=======
 import SearchStudent from "../screens/SearchStudent";
->>>>>>> 1a314e87ada8d7ee72c2da399c158de2368fe1e9
+import ListStudents from "../screens/ListStudents";
+
 const Stack = createStackNavigator();
 
 export default function LoginNavigation(props) {
@@ -28,11 +26,8 @@ export default function LoginNavigation(props) {
         <Stack.Screen name="Student_Portal" component={Student_Portal} />
         <Stack.Screen name="Staff_Portal" component={Staff_Portal} />
         <Stack.Screen name="Personal_Docs" component={PersonalDocs} />
-<<<<<<< HEAD
-        <Stack.Screen name="ListStudents" component={ListStudents} />
-=======
         <Stack.Screen name="Search_Student" component={SearchStudent} />
->>>>>>> 1a314e87ada8d7ee72c2da399c158de2368fe1e9
+        <Stack.Screen name="ListStudents" component={ListStudents} />
       </Stack.Navigator>
     </NavigationContainer>
   );

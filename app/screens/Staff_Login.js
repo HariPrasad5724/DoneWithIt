@@ -12,11 +12,14 @@ import ErrorMessage from "./ErrorMessage";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import * as Yup from "yup";
 import ChooseDesignation from "./ChooseDesignation";
+import AppTextInput from "../component/AppTextInput";
+import AppButton from "../component/AppButton";
 
 const validationSchema = Yup.object().shape({
   email: Yup.string().required().email().label("Email"),
   password: Yup.string().required().min(4).label("Password"),
 });
+
 function Staff_Login(props) {
   return (
     <View style={styles.container}>
@@ -33,15 +36,8 @@ function Staff_Login(props) {
       >
         {({ handleChange, handleSubmit, errors, touched, setFieldTouched }) => (
           <>
-            <View style={styles.radiusDef}>
-              <MaterialCommunityIcons
-                style={styles.icon}
-                size={20}
-                color="black"
-                name="email"
-              />
-              <TextInput
-                style={styles.textInput}
+            <View>
+              <AppTextInput
                 placeholder="Email"
                 autoCapitalize="none"
                 placeholderTextColor="gray"
@@ -50,23 +46,13 @@ function Staff_Login(props) {
                 keyboardType="email-address"
                 onBlur={() => setFieldTouched("email")}
                 autoFocus={true}
+                icon="email"
               />
               <ErrorMessage error={errors.email} visible={touched.email} />
             </View>
 
-            <View style={styles.radiusDef}>
-              <ChooseDesignation />
-            </View>
-
-            <View style={styles.radiusDef}>
-              <MaterialCommunityIcons
-                style={styles.icon}
-                size={20}
-                color="black"
-                name="lock"
-              />
-              <TextInput
-                style={styles.textInput}
+            <View>
+              <AppTextInput
                 autoCapitalize="none"
                 placeholderTextColor="gray"
                 placeholder="Password"
@@ -76,6 +62,7 @@ function Staff_Login(props) {
                 onBlur={() => setFieldTouched("password")}
                 keyboardType="default"
                 secureTextEntry={true}
+                icon="lock"
               />
 
               <ErrorMessage
@@ -84,17 +71,12 @@ function Staff_Login(props) {
               />
             </View>
 
-            <View style={{ paddingTop: 50 }}>
-              <TouchableOpacity
-                style={styles.button}
-                onPress={
-                  (handleSubmit,
-                  () => props.navigation.navigate("Display_Class"))
-                }
-              >
-                <Text style={styles.text}>Login</Text>
-              </TouchableOpacity>
-            </View>
+            <AppButton
+              onPress={
+                (handleSubmit, () => props.navigation.navigate("Display_Class"))
+              }
+              title="Login"
+            />
           </>
         )}
       </Formik>
@@ -104,11 +86,12 @@ function Staff_Login(props) {
 const styles = StyleSheet.create({
   container: {
     padding: 10,
-    backgroundColor: "#3b5998",
+    backgroundColor: "royalblue",
+    flex: 1,
   },
   logo: {
-    width: 80,
-    height: 70,
+    width: 100,
+    height: 100,
     alignSelf: "center",
     marginTop: 30,
     marginBottom: 20,

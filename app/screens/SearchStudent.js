@@ -5,9 +5,12 @@ import {
   StyleSheet,
   View,
   TextInput,
+  TouchableOpacity,
 } from "react-native";
 import { getStudents } from "../api/fakeStudentApi";
 import Card from "../component/Card";
+import AppText from "../component/AppText";
+import AppTextInput from "../component/AppTextInput";
 export default class SearchStudent extends Component {
   constructor(props) {
     super(props);
@@ -100,16 +103,14 @@ export default class SearchStudent extends Component {
 
     return (
       <View style={styles.MainContainer}>
-        <TextInput
-          style={styles.textInput}
+        <AppTextInput
           keyboardType="number-pad"
           onChangeText={(roll_no) => this.searchDataWithRoll(roll_no)}
           value={this.state.roll_no}
           underlineColorAndroid="transparent"
           placeholder="Enter the Roll no of the Student"
         />
-        <TextInput
-          style={styles.textInput}
+        <AppTextInput
           onChangeText={(document_name) =>
             this.searchDataWithDocname(document_name)
           }
@@ -117,16 +118,18 @@ export default class SearchStudent extends Component {
           underlineColorAndroid="transparent"
           placeholder="Enter the Document Name"
         />
+
         <FlatList
           data={this.state.data}
           keyExtractor={(item, index) => index.toString()}
-          ItemSeparatorComponent={this.itemSeparator}
           renderItem={({ item }) => (
-            <Card
-              title={item.register_number}
-              subtitle={item.name}
+            <TouchableOpacity
+              style={styles.textContainer}
               onPress={() => console.log("Clicked ", item.name)}
-            />
+            >
+              <AppText style={styles.title}>{item.name}</AppText>
+              <AppText style={styles.subtitle}>{item.register_number}</AppText>
+            </TouchableOpacity>
           )}
           style={{ marginTop: 10 }}
         />
@@ -137,9 +140,12 @@ export default class SearchStudent extends Component {
 
 const styles = StyleSheet.create({
   MainContainer: {
-    justifyContent: "center",
     flex: 1,
-    marginTop: 10,
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "lightgray",
+    padding: 10,
   },
 
   row: {
@@ -155,5 +161,23 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     backgroundColor: "#FFFF",
     marginTop: 20,
+  },
+  textContainer: {
+    width: 300,
+    height: 100,
+    margin: 10,
+    borderRadius: 20,
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "dodgerblue",
+  },
+  subtitle: {
+    color: "#fff",
+    fontWeight: "bold",
+  },
+  title: {
+    marginBottom: 5,
+    color: "#fff",
   },
 });

@@ -37,7 +37,7 @@ function ListClasses(props) {
     );
   };
   return (
-    <View styles={{ backgroundColor: "#3b5998" }}>
+    <View styles={{ backgroundColor: "royalblue" }}>
       <FlatList
         data={newClassData}
         keyExtractor={(message) => message.id}

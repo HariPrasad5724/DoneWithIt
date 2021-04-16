@@ -66,7 +66,6 @@ function Student_Login(props) {
                 (handleSubmit,
                 () => props.navigation.navigate("Student_Portal"))
               }
-              color="dodgerblue"
             />
           </>
         )}
@@ -77,7 +76,7 @@ function Student_Login(props) {
 const styles = StyleSheet.create({
   container: {
     padding: 10,
-    backgroundColor: "#eee",
+    backgroundColor: "royalblue",
     flex: 1,
   },
   logo: {

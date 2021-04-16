@@ -9,19 +9,12 @@ function Student_Portal(props) {
       style={{
         flex: 1,
         flexDirection: "column",
-        backgroundColor: "tomato",
-        // justifyContent: "center",
+        backgroundColor: "#fff",
       }}
     >
-      <View
-        style={{
-          flex: 1,
-          flexDirection: "column",
-          alignItems: "center",
-        }}
-      >
+      <View>
         <Image
-          style={{ width: 100, height: 100, margin: 10 }}
+          style={{ width: 100, height: 100, margin: 10, alignSelf: "center" }}
           source={require("../../assets/logo-red.png")}
         />
         <Card

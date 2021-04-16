@@ -12,12 +12,15 @@ import ErrorMessage from "./ErrorMessage";
 import DocumentPickerApp from "./DocumentPicker";
 import * as Yup from "yup";
 import ChooseCategory from "./ChooseCategory";
+import AppButton from "../component/AppButton";
+import AppTextInput from "../component/AppTextInput";
 
 const validationSchema = Yup.object().shape({
   roll_no: Yup.string().required().length(7).label("Roll No"),
   description: Yup.string().required().length(50).label("Description"),
   reason: Yup.string().required(),
 });
+
 function ReasonODForm(props) {
   return (
     <View style={styles.container}>
@@ -34,18 +37,8 @@ function ReasonODForm(props) {
       >
         {({ handleChange, handleSubmit, errors, touched, setFieldTouched }) => (
           <>
-            <View
-              style={{
-                justifyContent: "center",
-                alignSelf: "center",
-                backgroundColor: "white",
-                borderRadius: 25,
-                width: "80%",
-                paddingBottom: 10,
-              }}
-            >
-              <TextInput
-                style={styles.textInput}
+            <View>
+              <AppTextInput
                 placeholder="Roll no"
                 autoCapitalize="none"
                 placeholderTextColor="gray"
@@ -58,20 +51,8 @@ function ReasonODForm(props) {
               <ErrorMessage error={errors.roll_no} visible={touched.roll_no} />
             </View>
 
-            <View
-              style={{
-                justifyContent: "center",
-                alignSelf: "center",
-                marginTop: 10,
-                width: "80%",
-                paddingTop: 10,
-                backgroundColor: "white",
-                borderRadius: 25,
-                borderBottomColor: "black",
-              }}
-            >
-              <TextInput
-                style={styles.textInput}
+            <View>
+              <AppTextInput
                 autoCapitalize="none"
                 placeholderTextColor="gray"
                 placeholder="Description"
@@ -91,9 +72,9 @@ function ReasonODForm(props) {
             <View
               style={{
                 backgroundColor: "white",
-                borderRadius: 25,
-                width: "70%",
-                alignSelf: "center",
+                borderRadius: 50,
+                width: "100%",
+                alignItems: "center",
                 justifyContent: "center",
               }}
             >
@@ -102,17 +83,14 @@ function ReasonODForm(props) {
               <ErrorMessage error={errors.docs} visible={touched.docs} />
             </View>
 
-            <View>
-              <TouchableOpacity
-                style={styles.button}
-                onPress={
-                  (handleSubmit,
-                  () => props.navigation.navigate("Student_Portal"))
-                }
-              >
-                <Text style={styles.text}>Submit Docs</Text>
-              </TouchableOpacity>
-            </View>
+            <AppButton
+              onPress={
+                (handleSubmit,
+                () => props.navigation.navigate("Student_Portal"))
+              }
+              title={"Submit Docs"}
+              color="tomato"
+            />
           </>
         )}
       </Formik>
@@ -123,10 +101,11 @@ const styles = StyleSheet.create({
   container: {
     padding: 10,
     backgroundColor: "#3b5998",
+    flex: 1,
   },
   logo: {
-    width: 80,
-    height: 70,
+    width: 100,
+    height: 100,
     alignSelf: "center",
     marginTop: 10,
     marginBottom: 20,
@@ -136,8 +115,7 @@ const styles = StyleSheet.create({
   },
   textInput: {
     fontSize: 18,
-    paddingTop: 15,
-    paddingLeft: 60,
+
     borderBottomColor: "black",
     color: "black",
   },

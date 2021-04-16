@@ -1,60 +1,48 @@
 import React from "react";
-import {
-  Image,
-  View,
-  StyleSheet,
-  TouchableHighlight,
-  TouchableOpacity,
-  ImageComponent,
-} from "react-native";
+import { Image, View, StyleSheet, TouchableOpacity } from "react-native";
+
 import AppText from "./AppText";
-import Swipeable from "react-native-gesture-handler/Swipeable";
+import color from "../config/colors";
 
-function Card(props) {
+export default function Card({ title, subtitle, image, onPress, style }) {
   return (
-    <Swipeable renderRightActions={props.renderRightActions}>
-      <TouchableOpacity onPress={props.onPress}>
-        <View style={styles.card}>
-          {props.IconComponent}
-          {/* {props.image && <Image style={styles.image} source={props.image} />} */}
-          {/* {props.image && <Image style={styles.image} source={props.image} />} */}
-
-          <View style={styles.detailsContainer}>
-            <AppText style={styles.title} title={props.title} />
-            {props.subtitle && <AppText style={styles.subtitle} title={props.subtitle} />}
-          </View>
+    <TouchableOpacity onPress={onPress}>
+      <View style={[styles.card, style]}>
+        {image && <Image style={styles.image} source={image} />}
+        <View style={styles.textContainer}>
+          <AppText style={styles.title}>{title}</AppText>
+          <AppText style={styles.subtitle}>{subtitle}</AppText>
         </View>
-      </TouchableOpacity>
-    </Swipeable>
+      </View>
+    </TouchableOpacity>
   );
 }
 
 const styles = StyleSheet.create({
   card: {
+    width: "90%",
+    margin: 20,
+    backgroundColor: "dodgerblue",
     borderRadius: 15,
-    backgroundColor: "white",
-    margin: 10,
+    overflow: "hidden",
+    flex: 1,
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
   },
   image: {
-    width: "40%",
-    height: 130,
-    alignSelf: "center",
-  },
-  detailsContainer: {
-    paddingTop: 20,
-    padding: 15,
+    height: 100,
+    width: 100,
   },
   subtitle: {
-    color: "blue",
+    color: "#fff",
     fontWeight: "bold",
-    paddingLeft: 30,
+  },
+  textContainer: {
+    padding: 20,
   },
   title: {
-    marginBottom: 7,
-    color: "black",
-    fontSize: 20,
-    paddingLeft: 30,
+    marginBottom: 5,
+    color: "#fff",
   },
 });
-
-export default Card;
