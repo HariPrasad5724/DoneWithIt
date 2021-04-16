@@ -40,6 +40,7 @@ export default class SearchStudent extends Component {
       const itemRoll = item.register_number.toString();
       const textRoll = roll_no.toString();
       const student = itemRoll.indexOf(textRoll) > -1;
+      console.log(student);
       return student;
     });
 

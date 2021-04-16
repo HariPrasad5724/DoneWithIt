@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import Card from "../component/Card";
-import Personal_Docs from "../screens/PersonalDocs" 
 import { Text, FlatList, View, StyleSheet } from "react-native";
 
 export default class ListStudents extends Component {
@@ -25,17 +24,6 @@ export default class ListStudents extends Component {
       });
   }
 
-  _renderItem = ({ item, index }) => {
-    return (
-        <View style={styles.item}>
-          <Card
-          title={item.id}
-          onPress={() => navigation.navigate('Personal_Docs')}
-        >
-        </Card>
-        </View>
-    );
-  };
   render() {
     let { container } = styles;
     let { dataSource, isLoading } = this.state;
@@ -47,10 +35,7 @@ export default class ListStudents extends Component {
           renderItem={({ item }) => (
             <Card
               title={item.id}
-              onPress={() => this.props.navigation.navigate('Personal_Docs')}
-              // renderRightActions={() => (
-              //   <ListItemDelete onPress={() => handleDelete(item)} />
-              // )}
+              onPress={() => this.props.navigation.navigate('DisplayDocs',{id:item.id})}
             />
           )}
           keyExtractor={(item, index) => index.toString()}
