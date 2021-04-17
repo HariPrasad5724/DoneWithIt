@@ -16,14 +16,7 @@ function WelcomeScreen({ navigation }) {
         <Text style={{ fontSize: 22 }}>Coimbatore Institute of Technology</Text>
       </View>
       <View style={styles.buttonsContainer}>
-        <AppButton
-          title="Student Login"
-          onPress={() => navigation.navigate("Student_Login")}
-        />
-        <AppButton
-          title="Staff Login"
-          onPress={() => navigation.navigate("Staff_Login")}
-        />
+        <AppButton title="Login" onPress={() => navigation.navigate("Login")} />
       </View>
     </ImageBackground>
   );

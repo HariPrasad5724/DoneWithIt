@@ -22,7 +22,7 @@ export default function LoginNavigation(props) {
         <Stack.Screen name="Welcome" component={WelcomeScreen} />
         <Stack.Screen name="OD_Form" component={ReasonODForm} />
         <Stack.Screen name="Student_Login" component={Student_Login} />
-        <Stack.Screen name="Staff_Login" component={Staff_Login} />
+        <Stack.Screen name="Login" component={Staff_Login} />
         <Stack.Screen name="Display_Class" component={ListClasses} />
         <Stack.Screen name="Student_Portal" component={Student_Portal} />
         <Stack.Screen name="Staff_Portal" component={Staff_Portal} />

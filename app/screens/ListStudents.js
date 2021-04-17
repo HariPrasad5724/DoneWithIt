@@ -12,7 +12,7 @@ export default class ListStudents extends Component {
   }
 
   componentDidMount() {
-    fetch("http://jsonplaceholder.typicode.com/posts")
+    fetch("http://192.168.0.102:5000/user")
       .then((response) => response.json())
       .then((responseJson) => {
         this.setState({
@@ -20,7 +20,8 @@ export default class ListStudents extends Component {
           dataSource: responseJson,
         });
         console.log(responseJson);
-      });
+      })
+      .catch(console.log);
   }
 
   render() {
@@ -33,7 +34,9 @@ export default class ListStudents extends Component {
           renderItem={({ item }) => (
             <Card
               title={item.id}
-              onPress={() => this.props.navigation.navigate('DisplayDocs',{id:item.id})}
+              onPress={() =>
+                this.props.navigation.navigate("DisplayDocs", { id: item.id })
+              }
             />
           )}
           keyExtractor={(item, index) => index.toString()}
@@ -75,47 +78,3 @@ const styles = StyleSheet.create({
     color: "#fff",
   },
 });
-
-// const styles = StyleSheet.create({
-//   MainContainer: {
-//     flex: 1,
-//     flexDirection: "column",
-//     justifyContent: "center",
-//     alignItems: "center",
-//     backgroundColor: "lightgray",
-//     padding: 10,
-//   },
-
-//   row: {
-//     fontSize: 18,
-//     padding: 12,
-//   },
-
-//   textInput: {
-//     textAlign: "center",
-//     height: 42,
-//     borderWidth: 1,
-//     borderColor: "#009688",
-//     borderRadius: 8,
-//     backgroundColor: "#FFFF",
-//     marginTop: 20,
-//   },
-//   textContainer: {
-//     width: 300,
-//     height: 100,
-//     margin: 10,
-//     borderRadius: 20,
-//     flex: 1,
-//     alignItems: "center",
-//     justifyContent: "center",
-//     backgroundColor: "dodgerblue",
-//   },
-//   subtitle: {
-//     color: "#fff",
-//     fontWeight: "bold",
-//   },
-//   title: {
-//     marginBottom: 5,
-//     color: "#fff",
-//   },
-// });

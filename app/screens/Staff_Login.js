@@ -1,19 +1,17 @@
-import React from "react";
+import React, { useState } from "react";
 import { Formik } from "formik";
-import {
-  TouchableOpacity,
-  View,
-  StyleSheet,
-  Text,
-  Image,
-  TextInput,
-} from "react-native";
-import ErrorMessage from "./ErrorMessage";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { View, StyleSheet, Image } from "react-native";
+import { create } from "apisauce";
 import * as Yup from "yup";
-import ChooseDesignation from "./ChooseDesignation";
+import jwtDecode from "jwt-decode";
+
 import AppTextInput from "../component/AppTextInput";
 import AppButton from "../component/AppButton";
+import ErrorMessage from "./ErrorMessage";
+
+import config from "../config/config";
+import { useContext } from "react";
+import AuthContext from "../auth/context";
 
 const validationSchema = Yup.object().shape({
   email: Yup.string().required().email().label("Email"),
@@ -21,6 +19,34 @@ const validationSchema = Yup.object().shape({
 });
 
 function Staff_Login(props) {
+  const api = create({
+    baseURL: config["baseUrl"],
+  });
+
+  const authContext = useContext(AuthContext);
+  const handleSubmit = (values) => {
+    const body = { ...values };
+    body["Email"] = body["email"];
+    body["Password"] = body["password"];
+    delete body.email;
+    delete body.password;
+    console.log(body);
+
+    try {
+      api
+        .post(config["loginEndPoint"], body)
+        .then((response) => {
+          authContext.setUser(jwtDecode(response.data));
+          if (jwtDecode(response.data).isStaff) {
+            (() => props.navigation.navigate("Display_Class"))();
+          } else {
+            (() => props.navigation.navigate("Student_Portal"))();
+          }
+        })
+        .catch(console.log);
+    } catch (error) {}
+  };
+
   return (
     <View style={styles.container}>
       <View>
@@ -30,8 +56,8 @@ function Staff_Login(props) {
         />
       </View>
       <Formik
-        initialValues={{ email: "", password: "" }}
-        onSubmit={(values) => console.log(values)}
+        initialValues={{ Email: "", Password: "" }}
+        onSubmit={(values) => handleSubmit(values)}
         validationSchema={validationSchema}
       >
         {({ handleChange, handleSubmit, errors, touched, setFieldTouched }) => (
@@ -48,7 +74,7 @@ function Staff_Login(props) {
                 autoFocus={true}
                 icon="email"
               />
-              <ErrorMessage error={errors.email} visible={touched.email} />
+              <ErrorMessage error={errors.Email} visible={touched.Email} />
             </View>
 
             <View>
@@ -66,17 +92,12 @@ function Staff_Login(props) {
               />
 
               <ErrorMessage
-                error={errors.password}
-                visible={touched.password}
+                error={errors.Password}
+                visible={touched.Password}
               />
             </View>
 
-            <AppButton
-              onPress={
-                (handleSubmit, () => props.navigation.navigate("Display_Class"))
-              }
-              title="Login"
-            />
+            <AppButton onPress={handleSubmit} title="Login" />
           </>
         )}
       </Formik>

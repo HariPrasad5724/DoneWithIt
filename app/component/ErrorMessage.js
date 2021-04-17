@@ -10,6 +10,6 @@ export default function ErrorMessage({ error, visible }) {
 
 const styles = StyleSheet.create({
   text: {
-    color: "red",
+    color: "tomato",
   },
 });

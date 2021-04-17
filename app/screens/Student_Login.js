@@ -1,8 +1,12 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Formik } from "formik";
 import { View, StyleSheet, Image } from "react-native";
-import ErrorMessage from "./ErrorMessage";
+import { create } from "apisauce";
 import * as Yup from "yup";
+
+import config from "../config/config";
+
+import ErrorMessage from "./ErrorMessage";
 import AppButton from "../component/AppButton";
 import AppTextInput from "../component/AppTextInput";
 
@@ -12,6 +16,30 @@ const validationSchema = Yup.object().shape({
 });
 
 function Student_Login(props) {
+  // const [login, setlogin] = useState({ email: "", password: "" });
+
+  const api = create({
+    baseURL: config["baseUrl"],
+  });
+
+  const handleSubmit = (values) => {
+    // event.preventDefault();
+
+    // api
+    //   .get(config["loginEndPoint"])
+    //   .then((response) => response)
+    //   .then(console.log);
+    console.log(values);
+
+    api
+      .post(config["loginEndPoint"], values)
+      .then((response) => response)
+      .then(console.log)
+      .catch(console.log);
+
+    console.log(values);
+  };
+
   return (
     <View style={styles.container}>
       <View>
@@ -21,8 +49,8 @@ function Student_Login(props) {
         />
       </View>
       <Formik
-        initialValues={{ email: "", password: "" }}
-        onSubmit={(values) => console.log(values)}
+        initialValues={{ Email: "", Password: "" }}
+        onSubmit={(values) => handleSubmit(values)}
         validationSchema={validationSchema}
       >
         {({ handleChange, handleSubmit, errors, touched, setFieldTouched }) => (
@@ -34,12 +62,12 @@ function Student_Login(props) {
                 autoCapitalize="none"
                 placeholderTextColor="gray"
                 autoCorrect={false}
-                onChangeText={handleChange("email")}
+                onChangeText={handleChange("Email")}
                 keyboardType="email-address"
-                onBlur={() => setFieldTouched("email")}
+                onBlur={() => setFieldTouched("Email")}
                 autoFocus={true}
               />
-              <ErrorMessage error={errors.email} visible={touched.email} />
+              <ErrorMessage error={errors.Email} visible={touched.Email} />
             </View>
             <View>
               <AppTextInput
@@ -49,22 +77,23 @@ function Student_Login(props) {
                 placeholder="Password"
                 autoCapitalize="none"
                 autoCorrect={false}
-                onChangeText={handleChange("password")}
-                onBlur={() => setFieldTouched("password")}
+                onChangeText={handleChange("Password")}
+                onBlur={() => setFieldTouched("Password")}
                 keyboardType="default"
                 secureTextEntry={true}
               />
               <ErrorMessage
-                error={errors.password}
-                visible={touched.password}
+                error={errors.Password}
+                visible={touched.Password}
               />
             </View>
 
             <AppButton
               title="Login"
               onPress={
-                (handleSubmit,
-                () => props.navigation.navigate("Student_Portal"))
+                // (handleSubmit,
+                // () => props.navigation.navigate("Student_Portal"))
+                handleSubmit
               }
             />
           </>
