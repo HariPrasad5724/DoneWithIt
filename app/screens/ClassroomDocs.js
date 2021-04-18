@@ -16,7 +16,7 @@ import * as FileSystem from "expo-file-system";
 import * as Permissions from "expo-permissions";
 import * as MediaLibrary from "expo-media-library";
 
-export default function DisplayDocs({ route }) {
+export default function ClassroomDocs({ route }) {
   const { authToken } = useContext(AuthContext);
 
   const [files, setfiles] = useState([]);
@@ -25,7 +25,7 @@ export default function DisplayDocs({ route }) {
     getData();
   }, []);
 
-  const { category } = route.params;
+  const { classId } = route.params;
   const api = create({
     baseURL: config["baseUrl"],
     headers: {
@@ -35,27 +35,19 @@ export default function DisplayDocs({ route }) {
 
   const getData = async () => {
     let temp = [];
+    console.log(classId);
     try {
       await api
-        .get(config["filesGetEndPoint"])
+        .get(config["classfilesGetEndPoint"] + classId)
         .then((response) => {
           temp = [...response.data];
         })
         .catch(console.log);
       setfiles(temp);
     } catch (error) {}
-
-    if (category) {
-      const result = [];
-      for (let item of temp) {
-        if (item["category"] === category) result.push(item);
-      }
-      setfiles(result);
-    }
   };
 
   const downloadFile = async (file) => {
-    // console.log(file);
     const fileUri = `${FileSystem.documentDirectory}${file.filename}`;
     const downloadedFile = await FileSystem.downloadAsync(
       "http://192.168.0.103:5000/File/download/" + file._id,
@@ -66,8 +58,6 @@ export default function DisplayDocs({ route }) {
         },
       }
     );
-    console.log(fileUri);
-    console.log(downloadedFile);
     if (downloadedFile.status != 200) console.log("Something Went Wrong!!!!");
     else saveFileAsync(downloadedFile);
   };

@@ -2,7 +2,9 @@
   "loginEndPoint": "auth/signin",
   "baseUrl": "http://192.168.0.103:5000/",
   "classRoomEndPoint": "Classroom",
+  "userEndPoint": "User",
   "fileUploadEndPoint": "File/upload",
   "fileDownloadEndPoint": "File/download/",
-  "filesGetEndPoint": "File/getfiles"
+  "filesGetEndPoint": "File/getfiles",
+  "classfilesGetEndPoint": "File/Class/"
 }

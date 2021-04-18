@@ -1,51 +1,60 @@
-import React, { Component, useContext } from "react";
+import React, { Component, useContext, useEffect, useState } from "react";
 import Card from "../component/Card";
 import { Text, FlatList, View, StyleSheet } from "react-native";
 
-export default class ListStudents extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      isLoading: true,
-      dataSource: [],
-    };
-  }
+import config from "../config/config";
+import { create } from "apisauce";
 
-  
-  componentDidMount() {
-    fetch("http://192.168.0.102:5000/user")
-      .then((response) => response.json())
-      .then((responseJson) => {
-        this.setState({
-          isLoading: false,
-          dataSource: responseJson,
-        });
-        console.log(responseJson);
-      })
-      .catch(console.log);
-  }
+function ListStudents(props) {
+  const [users, setusers] = useState([]);
 
-  render() {
-    let { container } = styles;
-    let { dataSource, isLoading } = this.state;
-    return (
-      <View style={container}>
+  // const { user } = useContext(AuthContext);
+
+  const api = create({
+    baseURL: config["baseUrl"],
+  });
+
+  useEffect(() => {
+    getData();
+  }, []);
+
+  const getData = async () => {
+    let temp = [];
+
+    try {
+      await api
+        .get(config["userEndPoint"])
+        .then((response) => {
+          temp = [...response.data];
+          console.log(response.data);
+        })
+        .catch(console.log);
+    } catch (error) {}
+
+    setusers(temp);
+  };
+  return (
+    <View style={styles.container}>
+      <Text style={styles.title}>List Students</Text>
+      {users && (
         <FlatList
-          data={dataSource}
+          data={users}
           renderItem={({ item }) => (
             <Card
-              title={item.id}
-              onPress={() =>
-                this.props.navigation.navigate("DisplayDocs", { id: item.id })
-              }
+              title={"Name : " + item.Name}
+              subtitle={"Register No : " + item.RegisterNo}
+              // onPress={() => props.navigation.navigate("DisplayDocs")}
             />
           )}
-          keyExtractor={(item, index) => index.toString()}
+          keyExtractor={(message) => message._id}
         />
-      </View>
-    );
-  }
+      )}
+    </View>
+  );
 }
+
+export default ListStudents;
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -53,29 +62,17 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: "#F5FCFF",
     padding: 10,
-    paddingTop: 50,
   },
   item: {
     padding: 5,
     borderBottomWidth: 1,
     borderBottomColor: "#eee",
   },
-  textContainer: {
-    width: 300,
-    height: 100,
-    margin: 10,
-    borderRadius: 20,
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: "dodgerblue",
-  },
-  subtitle: {
-    color: "#fff",
-    fontWeight: "bold",
-  },
+
   title: {
     marginBottom: 5,
-    color: "#fff",
+    color: "#000",
+    fontSize: 30,
+    fontWeight: "bold",
   },
 });
