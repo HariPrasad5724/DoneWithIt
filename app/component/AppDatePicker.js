@@ -21,6 +21,7 @@ function AppDatePicker({ dateTitle, timeTitle, setDateTime }) {
     const timeArray = dateArray[4].split(":");
 
     setvalue(formatDate(currentDate));
+    setDateTime(formatDate(currentDate));
   };
 
   const formatDate = (date) => {
