@@ -11,6 +11,7 @@ import { getStudents } from "../api/fakeStudentApi";
 import Card from "../component/Card";
 import AppText from "../component/AppText";
 import AppTextInput from "../component/AppTextInput";
+import classroomContext from "../context/classroomContext";
 export default class SearchStudent extends Component {
   constructor(props) {
     super(props);
@@ -26,7 +27,10 @@ export default class SearchStudent extends Component {
     this.arrayholder = [];
   }
 
+  static context = classroomContext;
+
   componentDidMount() {
+    console.log(this.context);
     return this.setState(
       {
         isLoading: false,
@@ -52,20 +56,6 @@ export default class SearchStudent extends Component {
       roll_no,
     });
   }
-
-  /* searchDataWithDateOfSubmission(date_of_sub) {
-    const newData = this.arrayholder.filter((item) => {
-      const itemDocs = item.date_of_sub.toString();
-      const textDocs = date_of_sub.toString();
-      const students = itemDocs.indexOf(textDocs) > -1;
-      return students;
-    });
-
-    this.setState({
-      data: newData,
-      document_name,
-    });
-  }*/
 
   searchDataWithDocname(document_name) {
     const newData = this.arrayholder.filter((item) => {

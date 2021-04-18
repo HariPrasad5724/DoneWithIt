@@ -4,11 +4,11 @@ import { useContext } from "react";
 
 import AuthContext from "../auth/context";
 import Card from "../component/Card";
+import classroomContext from "../context/classroomContext";
 import ListItemDelete from "../component/ListItemDelete";
 import ListItemSeperator from "../component/ListItemSeperator";
 import config from "../config/config";
 import { create } from "apisauce";
-import axios from "axios";
 
 function ListClasses(props) {
   const [classData, setClassData] = useState([]);
@@ -41,31 +41,33 @@ function ListClasses(props) {
   };
 
   return (
-    <View styles={{ backgroundColor: "royalblue" }}>
-      {classData && (
-        <FlatList
-          data={classData}
-          keyExtractor={(message) => message._id}
-          renderItem={({ item }) => (
-            <Card
-              key={item._id}
-              title={item.Name}
-              subtitle={item.Batch}
-              image={item.image}
-              onPress={() => props.navigation.navigate("Staff_Portal")}
-              renderRightActions={() => (
-                <ListItemDelete onPress={() => handleDelete(item)} />
-              )}
-            />
-          )}
-          ItemSeparatorComponent={ListItemSeperator}
-          refreshing={refreshing}
-          onRefresh={() => {
-            setClassData(classData);
-          }}
-        />
-      )}
-    </View>
+    <classroomContext.Provider value={{ classData, setClassData }}>
+      <View styles={{ backgroundColor: "royalblue" }}>
+        {classData && (
+          <FlatList
+            data={classData}
+            keyExtractor={(message) => message._id}
+            renderItem={({ item }) => (
+              <Card
+                key={item._id}
+                title={item.Name}
+                subtitle={item.Batch}
+                image={item.image}
+                onPress={() => props.navigation.navigate("Staff_Portal")}
+                renderRightActions={() => (
+                  <ListItemDelete onPress={() => handleDelete(item)} />
+                )}
+              />
+            )}
+            ItemSeparatorComponent={ListItemSeperator}
+            refreshing={refreshing}
+            onRefresh={() => {
+              setClassData(classData);
+            }}
+          />
+        )}
+      </View>
+    </classroomContext.Provider>
   );
 }
 
