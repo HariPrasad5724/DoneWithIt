@@ -1,19 +1,20 @@
-import React from "react";
+import React, { useContext, useState } from "react";
 import { Formik } from "formik";
-import {
-  TouchableOpacity,
-  View,
-  StyleSheet,
-  Text,
-  Image,
-  TextInput,
-} from "react-native";
+import { View, StyleSheet, Text, Image, TouchableOpacity } from "react-native";
 import ErrorMessage from "./ErrorMessage";
+
 import DocumentPickerApp from "./DocumentPicker";
+
 import * as Yup from "yup";
-import ChooseCategory from "./ChooseCategory";
 import AppButton from "../component/AppButton";
 import AppTextInput from "../component/AppTextInput";
+import AppPicker from "../component/AppPicker";
+import AuthContext from "../auth/context";
+import AppText from "../component/AppText";
+import AppDatePicker from "../component/AppDatePicker";
+
+import { MaterialCommunityIcons } from "@expo/vector-icons";
+import * as DocumentPicker from "expo-document-picker";
 
 const validationSchema = Yup.object().shape({
   roll_no: Yup.string().required().length(7).label("Roll No"),
@@ -22,6 +23,41 @@ const validationSchema = Yup.object().shape({
 });
 
 function ReasonODForm(props) {
+  const categories = [
+    {
+      id: 1,
+      label: "Personal Documents",
+      value: "PD",
+    },
+    {
+      id: 2,
+      label: "On Duty",
+      value: "OD",
+    },
+    {
+      id: 3,
+      label: "Others",
+      value: "OTHERS",
+    },
+  ];
+
+  const [category, setCategory] = useState(categories[0]);
+
+  const { user, authToken } = useContext(AuthContext);
+
+  const [documentDetails, setdocumentDetails] = useState();
+
+  const readDocument = async () => {
+    try {
+      const result = await DocumentPicker.getDocumentAsync({
+        type: "application/*",
+      });
+      setdocumentDetails(result);
+    } catch (error) {
+      console.log("Can't open file", error);
+    }
+  };
+
   return (
     <View style={styles.container}>
       <View>
@@ -67,21 +103,58 @@ function ReasonODForm(props) {
             </View>
 
             <View>
-              <ChooseCategory />
+              <AppPicker
+                selectedItem={category}
+                onSelectItem={(item) => setCategory(item)}
+                items={categories}
+                placeholder="Reason for Leave"
+                icon="apps"
+              />
             </View>
-            <View
+
+            <AppDatePicker />
+            <TouchableOpacity
+              onPress={readDocument}
               style={{
-                backgroundColor: "white",
-                borderRadius: 50,
-                width: "100%",
-                alignItems: "center",
+                flexDirection: "row",
                 justifyContent: "center",
+                alignItems: "center",
+                borderWidth: 1,
+                borderRadius: 5,
+                width: 150,
               }}
             >
-              <Text style={styles.textInput}>Attach the Document</Text>
-              <DocumentPickerApp />
-              <ErrorMessage error={errors.docs} visible={touched.docs} />
-            </View>
+              <MaterialCommunityIcons name="paperclip" size={28} color="grey" />
+              <AppText style={{ fontSize: 15 }}>Add</AppText>
+            </TouchableOpacity>
+            {documentDetails && (
+              <View
+                style={{
+                  width: 300,
+                  height: 50,
+                  borderWidth: 1,
+                  borderRadius: 10,
+                  padding: 5,
+                  margin: 10,
+                  flex: 1,
+                  justifyContent: "center",
+                  alignItems: "center",
+                  fontSize: 24,
+                  flexDirection: "row",
+                  overflow: "hidden",
+                }}
+              >
+                <Text style={{ width: 200, fontSize: 14 }}>
+                  {documentDetails.name}
+                </Text>
+                <MaterialCommunityIcons
+                  onPress={() => setdocumentDetails(null)}
+                  name="close"
+                  size={24}
+                  color="grey"
+                />
+              </View>
+            )}
 
             <AppButton
               onPress={
@@ -89,7 +162,7 @@ function ReasonODForm(props) {
                 () => props.navigation.navigate("Student_Portal"))
               }
               title={"Submit Docs"}
-              color="tomato"
+              color="dodgerblue"
             />
           </>
         )}

@@ -1,30 +1,30 @@
 import React, { useState } from "react";
 import { View } from "react-native";
 import AppPicker from "../component/AppPicker";
-export default function ChooseCategory() {
+
+export default function ChooseCategory({ onSelectItem, selectedItem }) {
   const categories = [
     {
-      label: "Medical Leave",
-      value: 1,
+      id: 1,
+      label: "Personal Documents",
+      value: "PD",
     },
     {
-      label: "College event Leave",
-      value: 2,
+      id: 2,
+      label: "On Duty",
+      value: "OD",
     },
     {
-      label: "Placement Leave",
-      value: 3,
-    },
-    {
-      label: "Hackathon Participation Leave",
-      value: 4,
-    },
-    {
-      label: "Other Leave",
-      value: 5,
+      id: 3,
+      label: "Others",
+      value: "OTHERS",
     },
   ];
   const [category, setCategory] = useState(categories[0]);
+
+  const handleSelect = (id) => {
+    console.log(id);
+  };
   return (
     <View>
       <AppPicker

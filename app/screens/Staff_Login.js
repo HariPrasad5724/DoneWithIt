@@ -24,19 +24,20 @@ function Staff_Login(props) {
   });
 
   const authContext = useContext(AuthContext);
+
   const handleSubmit = (values) => {
     const body = { ...values };
     body["Email"] = body["email"];
     body["Password"] = body["password"];
     delete body.email;
     delete body.password;
-    console.log(body);
 
     try {
       api
         .post(config["loginEndPoint"], body)
         .then((response) => {
           authContext.setUser(jwtDecode(response.data));
+          authContext.setauthToken(response.data);
           if (jwtDecode(response.data).isStaff) {
             (() => props.navigation.navigate("Display_Class"))();
           } else {

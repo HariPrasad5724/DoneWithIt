@@ -8,7 +8,6 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { getStudents } from "../api/fakeStudentApi";
-import Card from "../component/Card";
 import AppText from "../component/AppText";
 import AppTextInput from "../component/AppTextInput";
 import classroomContext from "../context/classroomContext";
