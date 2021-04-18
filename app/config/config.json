@@ -3,6 +3,6 @@
   "baseUrl": "http://192.168.0.103:5000/",
   "classRoomEndPoint": "Classroom",
   "fileUploadEndPoint": "File/upload",
-  "fileDownloadEndPoint": "download",
+  "fileDownloadEndPoint": "File/download/",
   "filesGetEndPoint": "File/getfiles"
 }

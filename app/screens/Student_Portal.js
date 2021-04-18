@@ -8,25 +8,27 @@ function Student_Portal(props) {
 
   return (
     <ScrollView>
-      <View style={{ backgroundColor: "tomato" }}>
+      <View style={{ backgroundColor: "#fff" }}>
         <Card
-          title="Upload Personal Documents"
-          subtitle="Upload your personal documents like Birth certificates, MarkSheets , Government Documents and other personal documents here.."
-          image={require("../../assets/logo-red.png")}
-          onPress={() => props.navigation.navigate("Personal_Docs")}
-        ></Card>
-
-        <Card
-          title="Upload OD Docs"
-          subtitle="Upload your documents for OD here and make sure You have the document as PDF "
+          title="Upload Document"
+          subtitle="Upload your documents here and make sure You have the document as PDF "
           image={require("../../assets/logo-red.png")}
           onPress={() => props.navigation.navigate("OD_Form")}
         ></Card>
         <Card
-          title="Display Docs"
-          // subtitle="Upload your documents for OD here and make sure You have the document as PDF "
+          title="Display Personal Docs"
           image={require("../../assets/logo-red.png")}
-          onPress={() => props.navigation.navigate("DisplayDocs")}
+          onPress={() =>
+            props.navigation.navigate("DisplayDocs", { category: "PD" })
+          }
+        ></Card>
+
+        <Card
+          title="Display OnDuty Docs"
+          image={require("../../assets/logo-red.png")}
+          onPress={() =>
+            props.navigation.navigate("DisplayDocs", { category: "OD" })
+          }
         ></Card>
       </View>
     </ScrollView>

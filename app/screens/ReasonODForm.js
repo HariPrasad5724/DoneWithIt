@@ -1,10 +1,7 @@
 import React, { useContext, useState } from "react";
-import { Formik } from "formik";
-import { View, StyleSheet, Text, Image, TouchableOpacity } from "react-native";
+import { View, StyleSheet, Text, TouchableOpacity, Alert } from "react-native";
 
-import * as Yup from "yup";
 import AppButton from "../component/AppButton";
-import AppTextInput from "../component/AppTextInput";
 import AppPicker from "../component/AppPicker";
 import AuthContext from "../auth/context";
 import AppText from "../component/AppText";
@@ -12,15 +9,11 @@ import AppDatePicker from "../component/AppDatePicker";
 
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import * as DocumentPicker from "expo-document-picker";
+import * as FileSystem from "expo-file-system";
 
 import config from "../config/config";
 import { create } from "apisauce";
-
-const validationSchema = Yup.object().shape({
-  roll_no: Yup.string().required().length(7).label("Roll No"),
-  description: Yup.string().required().length(50).label("Description"),
-  reason: Yup.string().required(),
-});
+import { FileSystemUploadType } from "expo-file-system";
 
 function ReasonODForm(props) {
   const categories = [
@@ -45,15 +38,7 @@ function ReasonODForm(props) {
   const [date, setdate] = useState();
   const [documentDetails, setdocumentDetails] = useState();
 
-  const { user, authToken } = useContext(AuthContext);
-
-  const api = create({
-    baseURL: config["baseUrl"],
-    headers: {
-      Authorization: "Bearer " + authToken,
-      Accept: "application",
-    },
-  });
+  const { authToken } = useContext(AuthContext);
 
   const readDocument = async () => {
     try {
@@ -68,42 +53,33 @@ function ReasonODForm(props) {
   };
 
   const handleSubmit = async () => {
-    // console.log(date);
-    // console.log(category);
-    // console.log(documentDetails);
-    const body = { ...documentDetails };
+    console.log(date);
+    console.log(category);
+    console.log(documentDetails);
 
-    delete body.type;
-    body.type=""
+    const result = await FileSystem.uploadAsync(
+      config["baseUrl"] + config["fileUploadEndPoint"],
+      documentDetails["uri"],
+      {
+        headers: {
+          Authorization: "Bearer " + authToken,
+          "content-type": "multipart/form-data",
+        },
+        fieldName: "file",
+        uploadType: FileSystemUploadType.MULTIPART,
+        parameters: {
+          category: category["value"],
+          date: date,
+        },
+      }
+    );
 
-    const temp = new FormData();
+    console.log(result);
 
-    temp.append("file", documentDetails);
-    temp.append("category", category["value"]);
-    temp.append("date", date);
-
-    try {
-      const result = await api
-        .post(config["fileUploadEndPoint"], temp)
-        .then((response) => {
-          // console.log(response);
-        })
-        .catch(console.log);
-
-      console.log(result);
-    } catch (error) {}
-
-    const options = {
-      method: "POST",
-      body: temp,
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "multipart/form-data",
-      },
-    };
-    console.log(formData);
-
-    fetch(url, options).catch((error) => console.log(error));
+    if (result.status === 200) {
+      Alert.alert("File Upload Sucessful!!!!");
+      (() => props.navigation.navigate("Student_Portal"))();
+    } else Alert.alert("Try Again Later!!!");
   };
 
   return (

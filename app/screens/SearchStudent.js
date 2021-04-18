@@ -11,6 +11,7 @@ import { getStudents } from "../api/fakeStudentApi";
 import AppText from "../component/AppText";
 import AppTextInput from "../component/AppTextInput";
 import classroomContext from "../context/classroomContext";
+
 export default class SearchStudent extends Component {
   constructor(props) {
     super(props);

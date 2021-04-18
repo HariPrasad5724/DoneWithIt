@@ -33,10 +33,10 @@ const styles = StyleSheet.create({
   image: {
     height: 100,
     width: 100,
+    margin: 10,
   },
   subtitle: {
     color: "#fff",
-    fontWeight: "bold",
   },
   textContainer: {
     padding: 20,
@@ -44,5 +44,6 @@ const styles = StyleSheet.create({
   title: {
     marginBottom: 5,
     color: "#fff",
+    fontWeight: "bold",
   },
 });
