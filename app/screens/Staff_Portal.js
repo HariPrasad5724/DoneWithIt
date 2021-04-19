@@ -9,7 +9,7 @@ function Staff_Portal(props) {
           title="View Students"
           subtitle="The personal documents of the student can be accessed here"
           image={require("../../assets/logo-red.png")}
-          onPress={() => props.navigation.navigate("ListStudents")}
+          onPress={() => props.navigation.navigate("ListStudents",{id:props.route.params.id})}
         ></Card>
 
         <Card

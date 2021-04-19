@@ -53,7 +53,7 @@ function ListClasses(props) {
                 title={item.Name}
                 subtitle={item.Batch}
                 image={item.image}
-                onPress={() => props.navigation.navigate("Staff_Portal")}
+                onPress={() => props.navigation.navigate(("Staff_Portal"),{_id:item._id})}
                 renderRightActions={() => (
                   <ListItemDelete onPress={() => handleDelete(item)} />
                 )}
