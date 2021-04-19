@@ -5,6 +5,7 @@ import {
   View,
   ScrollView,
   TouchableOpacity,
+  Alert,
 } from "react-native";
 import AuthContext from "../auth/context";
 
@@ -18,20 +19,19 @@ import * as MediaLibrary from "expo-media-library";
 
 export default function DisplayDocs({ route }) {
   const { authToken } = useContext(AuthContext);
+  const { category } = route.params;
 
   const [files, setfiles] = useState([]);
-
-  useEffect(() => {
-    getData();
-  }, []);
-
-  const { category } = route.params;
   const api = create({
     baseURL: config["baseUrl"],
     headers: {
       Authorization: "Bearer " + authToken,
     },
   });
+
+  useEffect(() => {
+    getData();
+  }, []);
 
   const getData = async () => {
     let temp = [];
@@ -43,7 +43,11 @@ export default function DisplayDocs({ route }) {
         })
         .catch(console.log);
       setfiles(temp);
-    } catch (error) {}
+    } catch (error) {
+      Alert.alert("Try Again Later!!!!");
+    }
+
+    console.log(temp);
 
     if (category) {
       const result = [];
@@ -55,7 +59,6 @@ export default function DisplayDocs({ route }) {
   };
 
   const downloadFile = async (file) => {
-    // console.log(file);
     const fileUri = `${FileSystem.documentDirectory}${file.filename}`;
     const downloadedFile = await FileSystem.downloadAsync(
       "http://192.168.0.103:5000/File/download/" + file._id,
@@ -66,19 +69,15 @@ export default function DisplayDocs({ route }) {
         },
       }
     );
-    console.log(fileUri);
-    console.log(downloadedFile);
+
     if (downloadedFile.status != 200) console.log("Something Went Wrong!!!!");
     else saveFileAsync(downloadedFile);
   };
 
   const saveFileAsync = async (downloadedFile) => {
-    const perm = await Permissions.askAsync(Permissions.MEDIA_LIBRARY);
-    if (perm.status != "granted") {
-      return;
-    }
-
     try {
+      const perm = await Permissions.askAsync(Permissions.MEDIA_LIBRARY);
+      if (perm.status != "granted") return;
       const asset = await MediaLibrary.createAssetAsync(downloadedFile.uri);
       const album = await MediaLibrary.getAlbumAsync("Download");
       if (album == null) {
@@ -86,8 +85,9 @@ export default function DisplayDocs({ route }) {
       } else {
         await MediaLibrary.addAssetsToAlbumAsync([asset], album, false);
       }
+      Alert.alert("Download Completed");
     } catch (e) {
-      console.log("Something Went Wrong!!!!");
+      Alert.alert("Something Went Wrong!!!!");
     }
   };
 

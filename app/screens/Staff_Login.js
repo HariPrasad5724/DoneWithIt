@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useContext } from "react";
 import { Formik } from "formik";
-import { View, StyleSheet, Image } from "react-native";
+import { View, StyleSheet, Image, Alert } from "react-native";
 import { create } from "apisauce";
 import * as Yup from "yup";
 import jwtDecode from "jwt-decode";
@@ -10,12 +10,11 @@ import AppButton from "../component/AppButton";
 import ErrorMessage from "./ErrorMessage";
 
 import config from "../config/config";
-import { useContext } from "react";
 import AuthContext from "../auth/context";
 
 const validationSchema = Yup.object().shape({
-  email: Yup.string().required().email().label("Email"),
-  password: Yup.string().required().min(4).label("Password"),
+  Email: Yup.string().required().email().label("Email"),
+  Password: Yup.string().required().min(4).label("Password"),
 });
 
 function Staff_Login(props) {
@@ -25,23 +24,26 @@ function Staff_Login(props) {
 
   const authContext = useContext(AuthContext);
 
-  const handleSubmit = (values) => {
+  const handleSubmit = async (values) => {
     const body = { ...values };
-    body["Email"] = body["email"];
-    body["Password"] = body["password"];
-    delete body.email;
-    delete body.password;
 
     try {
-      api
+      await api
         .post(config["loginEndPoint"], body)
         .then((response) => {
-          authContext.setUser(jwtDecode(response.data));
-          authContext.setauthToken(response.data);
-          if (jwtDecode(response.data).isStaff) {
-            (() => props.navigation.navigate("Display_Class"))();
+          if (
+            response.data.toLowerCase() ===
+            "User credentials are wrong".toLowerCase()
+          ) {
+            Alert.alert("Invalid Email or Password!!!");
           } else {
-            (() => props.navigation.navigate("Student_Portal"))();
+            authContext.setUser(jwtDecode(response.data));
+            authContext.setauthToken(response.data);
+            if (jwtDecode(response.data).isStaff) {
+              (() => props.navigation.navigate("Display_Class"))();
+            } else {
+              (() => props.navigation.navigate("Student_Portal"))();
+            }
           }
         })
         .catch(console.log);
@@ -65,15 +67,15 @@ function Staff_Login(props) {
           <>
             <View>
               <AppTextInput
-                placeholder="Email"
                 autoCapitalize="none"
-                placeholderTextColor="gray"
                 autoCorrect={false}
-                onChangeText={handleChange("email")}
-                keyboardType="email-address"
-                onBlur={() => setFieldTouched("email")}
-                autoFocus={true}
                 icon="email"
+                keyboardType="email-address"
+                placeholder="Email"
+                placeholderTextColor="gray"
+                onChangeText={handleChange("Email")}
+                // onBlur={() => setFieldTouched("email")}
+                // autoFocus={true}
               />
               <ErrorMessage error={errors.Email} visible={touched.Email} />
             </View>
@@ -81,15 +83,14 @@ function Staff_Login(props) {
             <View>
               <AppTextInput
                 autoCapitalize="none"
-                placeholderTextColor="gray"
-                placeholder="Password"
-                autoCapitalize="none"
                 autoCorrect={false}
-                onChangeText={handleChange("password")}
-                onBlur={() => setFieldTouched("password")}
-                keyboardType="default"
-                secureTextEntry={true}
                 icon="lock"
+                keyboardType="default"
+                onChangeText={handleChange("Password")}
+                placeholder="Password"
+                placeholderTextColor="gray"
+                secureTextEntry={true}
+                // onBlur={() => setFieldTouched("password")}
               />
 
               <ErrorMessage
@@ -99,6 +100,11 @@ function Staff_Login(props) {
             </View>
 
             <AppButton onPress={handleSubmit} title="Login" />
+            <AppButton
+              onPress={() => props.navigation.navigate("ForgotPassword")}
+              title="Forgot Password"
+              color="tomato"
+            />
           </>
         )}
       </Formik>
@@ -108,12 +114,12 @@ function Staff_Login(props) {
 const styles = StyleSheet.create({
   container: {
     padding: 10,
-    backgroundColor: "royalblue",
+    backgroundColor: "lightgray",
     flex: 1,
   },
   logo: {
-    width: 100,
-    height: 100,
+    width: 120,
+    height: 120,
     alignSelf: "center",
     marginTop: 30,
     marginBottom: 20,

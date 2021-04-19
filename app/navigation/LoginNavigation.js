@@ -15,6 +15,7 @@ import SearchStudent from "../screens/SearchStudent";
 import ListStudents from "../screens/ListStudents";
 import DisplayDocs from "../screens/DisplayDocs";
 import ClassroomDocs from "../screens/ClassroomDocs";
+import ForgotPassword from "../screens/ForgotPassword";
 
 const Stack = createStackNavigator();
 
@@ -34,6 +35,7 @@ export default function LoginNavigation(props) {
         <Stack.Screen name="Search_Student" component={SearchStudent} />
         <Stack.Screen name="ListStudents" component={ListStudents} />
         <Stack.Screen name="ClassroomDocs" component={ClassroomDocs} />
+        <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
       </Stack.Navigator>
     </NavigationContainer>
   );
