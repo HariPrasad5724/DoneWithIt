@@ -1,9 +1,11 @@
 import React from "react";
-import ReasonODForm from "../screens/ReasonODForm";
-import WelcomeScreen from "../screens/WelcomeScreen";
-import ListClasses from "../screens/ListClasses";
+
 import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer } from "@react-navigation/native";
+
+import WelcomeScreen from "../screens/WelcomeScreen";
+import ReasonODForm from "../screens/ReasonODForm";
+import ListClasses from "../screens/ListClasses";
 import Staff_Login from "../screens/Staff_Login";
 import Student_Login from "../screens/Student_Login";
 import Student_Portal from "../screens/Student_Portal";
@@ -12,7 +14,12 @@ import Staff_Portal from "../screens/Staff_Portal";
 import SearchStudent from "../screens/SearchStudent";
 import ListStudents from "../screens/ListStudents";
 import DisplayDocs from "../screens/DisplayDocs";
+<<<<<<< HEAD
 import ListUserDocs from "../screens/ListUserDocs";
+=======
+import ClassroomDocs from "../screens/ClassroomDocs";
+import ForgotPassword from "../screens/ForgotPassword";
+>>>>>>> 7f7446728281ef8f635531d6e271d5b5aac22ed8
 
 const Stack = createStackNavigator();
 
@@ -31,7 +38,12 @@ export default function LoginNavigation(props) {
         <Stack.Screen name="DisplayDocs" component={DisplayDocs} />
         <Stack.Screen name="Search_Student" component={SearchStudent} />
         <Stack.Screen name="ListStudents" component={ListStudents} />
+<<<<<<< HEAD
         <Stack.Screen name="ListUserDocs" component={ListUserDocs} />
+=======
+        <Stack.Screen name="ClassroomDocs" component={ClassroomDocs} />
+        <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
+>>>>>>> 7f7446728281ef8f635531d6e271d5b5aac22ed8
       </Stack.Navigator>
     </NavigationContainer>
   );

@@ -10,80 +10,94 @@ import AppDatePicker from "../component/AppDatePicker";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import * as DocumentPicker from "expo-document-picker";
 import * as FileSystem from "expo-file-system";
+import * as Notifications from "expo-notifications";
 
 import config from "../config/config";
-import { create } from "apisauce";
 import { FileSystemUploadType } from "expo-file-system";
+import ActivityIndicator from "../component/ActivityIndicator";
+
+const categories = [
+  {
+    id: 1,
+    label: "Personal Documents",
+    value: "PD",
+  },
+  {
+    id: 2,
+    label: "On Duty",
+    value: "OD",
+  },
+  {
+    id: 3,
+    label: "Others",
+    value: "OTHERS",
+  },
+];
 
 function ReasonODForm(props) {
-  const categories = [
-    {
-      id: 1,
-      label: "Personal Documents",
-      value: "PD",
-    },
-    {
-      id: 2,
-      label: "On Duty",
-      value: "OD",
-    },
-    {
-      id: 3,
-      label: "Others",
-      value: "OTHERS",
-    },
-  ];
-
   const [category, setCategory] = useState(categories[0]);
   const [date, setdate] = useState();
   const [documentDetails, setdocumentDetails] = useState();
+  const [loading, setloading] = useState(false);
 
   const { authToken } = useContext(AuthContext);
 
   const readDocument = async () => {
     try {
       const result = await DocumentPicker.getDocumentAsync({
-        type: "*/*",
+        type: "application/*",
         copyToCacheDirectory: true,
       });
       setdocumentDetails(result);
     } catch (error) {
-      console.log("Can't open file", error);
+      Alert.alert("Can't open file");
     }
   };
 
   const handleSubmit = async () => {
-    console.log(date);
-    console.log(category);
     console.log(documentDetails);
+    if (date === undefined) {
+      Alert.alert("Select Date Field!!!!");
+    } else if (
+      documentDetails === undefined ||
+      documentDetails["type"] === "cancel"
+    ) {
+      Alert.alert("Select A Document to upload !!!");
+    } else {
+      try {
+        const result = await FileSystem.uploadAsync(
+          config["baseUrl"] + config["fileUploadEndPoint"],
+          documentDetails["uri"],
+          {
+            headers: {
+              Authorization: "Bearer " + authToken,
+              "content-type": "multipart/form-data",
+            },
+            fieldName: "file",
+            uploadType: FileSystemUploadType.MULTIPART,
+            parameters: {
+              category: category["value"],
+              date: date,
+            },
+          }
+        );
 
-    const result = await FileSystem.uploadAsync(
-      config["baseUrl"] + config["fileUploadEndPoint"],
-      documentDetails["uri"],
-      {
-        headers: {
-          Authorization: "Bearer " + authToken,
-          "content-type": "multipart/form-data",
-        },
-        fieldName: "file",
-        uploadType: FileSystemUploadType.MULTIPART,
-        parameters: {
-          category: category["value"],
-          date: date,
-        },
+        console.log(result);
+
+        if (result.status === 200) {
+          // setloading(true);
+          Alert.alert("File Upload Sucessful!!!!");
+          props.navigation.navigate("Student_Portal");
+        } else Alert.alert("Try Again Later!!!");
+      } catch (error) {
+        console.log(error);
       }
-    );
-
-    console.log(result);
-
-    if (result.status === 200) {
-      Alert.alert("File Upload Sucessful!!!!");
-      (() => props.navigation.navigate("Student_Portal"))();
-    } else Alert.alert("Try Again Later!!!");
+    }
   };
 
   return (
     <View style={styles.container}>
+      <ActivityIndicator visible={loading} />
       <View>
         <AppPicker
           selectedItem={category}
@@ -108,7 +122,7 @@ function ReasonODForm(props) {
             {documentDetails.name}
           </Text>
           <MaterialCommunityIcons
-            onPress={() => setdocumentDetails(null)}
+            onPress={() => setdocumentDetails(undefined)}
             name="close"
             size={30}
             color="white"
@@ -127,7 +141,7 @@ function ReasonODForm(props) {
 const styles = StyleSheet.create({
   container: {
     padding: 10,
-    backgroundColor: "#3b5998",
+    backgroundColor: "lightgray",
     flex: 1,
   },
   addButton: {

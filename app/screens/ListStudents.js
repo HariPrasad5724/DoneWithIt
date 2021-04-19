@@ -50,6 +50,9 @@ console.log(responseJson);
   </View>
 }
 }
+
+export default ListStudents;
+
 const styles = StyleSheet.create({
   container: {
     flex:1,
