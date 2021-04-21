@@ -1,4 +1,11 @@
-import React, { Component, useContext, useEffect, useState } from "react";
+import React, { Component } from "react";
+import {
+  StyleSheet,
+  Text,
+  View,
+  FlatList,
+  ActivityIndicator,
+} from "react-native";
 import Card from "../component/Card";
 import { Text, FlatList, View, StyleSheet } from "react-native";
 import userApi from "../services/usersApi";
@@ -8,10 +15,6 @@ function ListStudents(props) {
   const [users, setusers] = useState([]);
   const [searchWord, setsearchWord] = useState("");
   const [filteredUsers, setFilteredUsers] = useState([]);
-
-  useEffect(() => {
-    getData();
-  }, []);
 
   const handleOnChange = (student) => {
     setsearchWord(student);
