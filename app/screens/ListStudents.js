@@ -1,51 +1,61 @@
 import React, { Component, useContext, useEffect, useState } from "react";
 import Card from "../component/Card";
 import { Text, FlatList, View, StyleSheet } from "react-native";
-
-import config from "../config/config";
-import { create } from "apisauce";
+import userApi from "../services/usersApi";
+import AppTextInput from "../component/AppTextInput";
 
 function ListStudents(props) {
   const [users, setusers] = useState([]);
-
-  // const { user } = useContext(AuthContext);
-
-  const api = create({
-    baseURL: config["baseUrl"],
-  });
+  const [searchWord, setsearchWord] = useState("");
+  const [filteredUsers, setFilteredUsers] = useState([]);
 
   useEffect(() => {
     getData();
   }, []);
 
+  const handleOnChange = (student) => {
+    setsearchWord(student);
+    if (student) {
+      const result = users.filter((user) =>
+        user.Name.toLowerCase().includes(student.toLowerCase())
+      );
+      setFilteredUsers(result);
+    } else setFilteredUsers(users);
+  };
+
   const getData = async () => {
-    let temp = [];
-
     try {
-      await api
-        .get(config["userEndPoint"])
-        .then((response) => {
-          temp = [...response.data];
-          console.log(response.data);
-        })
-        .catch(console.log);
-    } catch (error) {}
-
-    setusers(temp);
+      let temp = [];
+      const result = await userApi.getUsers();
+      temp = [...result.data];
+      setFilteredUsers(temp);
+      setusers(temp);
+    } catch (error) {
+      console.log("Error getting students list ", error);
+    }
   };
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>List Students</Text>
-      {users && (
+      <Text style={styles.title}>Students</Text>
+      <AppTextInput
+        placeholder="Search"
+        onChangeText={(e) => handleOnChange(e)}
+        value={searchWord}
+        icon="account-search-outline"
+      />
+      {filteredUsers.length === 0 ? (
+        <Text style={styles.text}>No students are there</Text>
+      ) : (
         <FlatList
-          data={users}
-          renderItem={({ item }) => (
-            <Card
-              title={"Name : " + item.Name}
-              subtitle={"Register No : " + item.RegisterNo}
-              // onPress={() => props.navigation.navigate("DisplayDocs")}
-            />
-          )}
+          data={filteredUsers}
+          renderItem={({ item }) =>
+            !item.isStaff && (
+              <Card
+                title={"Name : " + item.Name}
+                subtitle={"Register No : " + item.RegisterNo}
+              />
+            )
+          }
           keyExtractor={(message) => message._id}
         />
       )}
@@ -58,9 +68,8 @@ export default ListStudents;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#F5FCFF",
+    backgroundColor: "lightgray",
     padding: 10,
   },
   item: {
@@ -74,5 +83,11 @@ const styles = StyleSheet.create({
     color: "#000",
     fontSize: 30,
     fontWeight: "bold",
+  },
+  text: {
+    fontSize: 20,
+    textAlign: "center",
+    top: 50,
+    color: "gray",
   },
 });

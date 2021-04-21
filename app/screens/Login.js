@@ -1,7 +1,6 @@
 import React, { useContext } from "react";
 import { Formik } from "formik";
 import { View, StyleSheet, Image, Alert } from "react-native";
-import { create } from "apisauce";
 import * as Yup from "yup";
 import jwtDecode from "jwt-decode";
 
@@ -9,45 +8,36 @@ import AppTextInput from "../component/AppTextInput";
 import AppButton from "../component/AppButton";
 import ErrorMessage from "./ErrorMessage";
 
-import config from "../config/config";
 import AuthContext from "../auth/context";
+import authApi from "../services/auth";
+import authStorage from "../services/authStorage";
 
 const validationSchema = Yup.object().shape({
   Email: Yup.string().required().email().label("Email"),
   Password: Yup.string().required().min(4).label("Password"),
 });
 
-function Staff_Login(props) {
-  const api = create({
-    baseURL: config["baseUrl"],
-  });
-
+function Login(props) {
   const authContext = useContext(AuthContext);
 
   const handleSubmit = async (values) => {
     const body = { ...values };
 
     try {
-      await api
-        .post(config["loginEndPoint"], body)
-        .then((response) => {
-          if (
-            response.data.toLowerCase() ===
-            "User credentials are wrong".toLowerCase()
-          ) {
-            Alert.alert("Invalid Email or Password!!!");
-          } else {
-            authContext.setUser(jwtDecode(response.data));
-            authContext.setauthToken(response.data);
-            if (jwtDecode(response.data).isStaff) {
-              (() => props.navigation.navigate("Display_Class"))();
-            } else {
-              (() => props.navigation.navigate("Student_Portal"))();
-            }
-          }
-        })
-        .catch(console.log);
-    } catch (error) {}
+      const result = await authApi.login(body);
+      console.log(result.ok);
+      if (!result.ok) {
+        Alert.alert("Invalid Email or Password!!!");
+      } else {
+        authContext.setUser(jwtDecode(result.data));
+        authStorage.storeToken(result.data);
+        if (jwtDecode(result.data).isStaff)
+          props.navigation.navigate("Display_Class");
+        else props.navigation.navigate("Student_Portal");
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -63,7 +53,7 @@ function Staff_Login(props) {
         onSubmit={(values) => handleSubmit(values)}
         validationSchema={validationSchema}
       >
-        {({ handleChange, handleSubmit, errors, touched, setFieldTouched }) => (
+        {({ handleChange, handleSubmit, errors, touched }) => (
           <>
             <View>
               <AppTextInput
@@ -74,8 +64,6 @@ function Staff_Login(props) {
                 placeholder="Email"
                 placeholderTextColor="gray"
                 onChangeText={handleChange("Email")}
-                // onBlur={() => setFieldTouched("email")}
-                // autoFocus={true}
               />
               <ErrorMessage error={errors.Email} visible={touched.Email} />
             </View>
@@ -90,7 +78,6 @@ function Staff_Login(props) {
                 placeholder="Password"
                 placeholderTextColor="gray"
                 secureTextEntry={true}
-                // onBlur={() => setFieldTouched("password")}
               />
 
               <ErrorMessage
@@ -124,33 +111,5 @@ const styles = StyleSheet.create({
     marginTop: 30,
     marginBottom: 20,
   },
-  icon: {
-    paddingTop: 10,
-    paddingLeft: 20,
-  },
-  textInput: {
-    fontSize: 18,
-    paddingLeft: 60,
-    color: "black",
-  },
-  text: {
-    color: "white",
-    fontSize: 25,
-  },
-  button: {
-    backgroundColor: "tomato",
-    justifyContent: "center",
-    borderRadius: 20,
-    alignItems: "center",
-    paddingTop: 20,
-    width: "100%",
-    marginVertical: 15,
-  },
-  radiusDef: {
-    marginTop: 15,
-    borderRadius: 25,
-    paddingLeft: 30,
-    backgroundColor: "white",
-  },
 });
-export default Staff_Login;
+export default Login;

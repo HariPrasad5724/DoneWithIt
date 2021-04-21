@@ -47,7 +47,7 @@ function AppDatePicker({ dateTitle, timeTitle, setDateTime }) {
 
   return (
     <>
-      <View style={styles.conatiner}>
+      <View style={styles.container}>
         <AppButton
           onPress={showDatepicker}
           title="Date"
@@ -75,18 +75,21 @@ export default AppDatePicker;
 const styles = StyleSheet.create({
   text: {
     height: 50,
-    fontSize: 16,
+    fontSize: 20,
     width: 200,
     backgroundColor: "white",
     height: 40,
     marginVertical: 5,
     borderRadius: 10,
+    padding: 5,
+    fontWeight: "900",
   },
-  conatiner: {
+  container: {
     flex: 1,
     flexDirection: "row",
     alignItems: "center",
-    marginBottom: 10,
+    margin: 10,
+    height: 200,
   },
   button: { margin: 0, width: 100, marginRight: 5 },
 });

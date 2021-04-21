@@ -1,20 +1,15 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import { View, StyleSheet, Text, TouchableOpacity, Alert } from "react-native";
 
 import AppButton from "../component/AppButton";
 import AppPicker from "../component/AppPicker";
-import AuthContext from "../auth/context";
 import AppText from "../component/AppText";
 import AppDatePicker from "../component/AppDatePicker";
 
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import * as DocumentPicker from "expo-document-picker";
-import * as FileSystem from "expo-file-system";
-import * as Notifications from "expo-notifications";
-
-import config from "../config/config";
-import { FileSystemUploadType } from "expo-file-system";
 import ActivityIndicator from "../component/ActivityIndicator";
+import FileService from "../services/FileService";
 
 const categories = [
   {
@@ -40,8 +35,6 @@ function ReasonODForm(props) {
   const [documentDetails, setdocumentDetails] = useState();
   const [loading, setloading] = useState(false);
 
-  const { authToken } = useContext(AuthContext);
-
   const readDocument = async () => {
     try {
       const result = await DocumentPicker.getDocumentAsync({
@@ -64,33 +57,21 @@ function ReasonODForm(props) {
     ) {
       Alert.alert("Select A Document to upload !!!");
     } else {
+      const fileName = documentDetails["name"].split(".")[0];
+      console.log(fileName);
       try {
-        const result = await FileSystem.uploadAsync(
-          config["baseUrl"] + config["fileUploadEndPoint"],
+        const result = await FileService.uploadFile(
           documentDetails["uri"],
-          {
-            headers: {
-              Authorization: "Bearer " + authToken,
-              "content-type": "multipart/form-data",
-            },
-            fieldName: "file",
-            uploadType: FileSystemUploadType.MULTIPART,
-            parameters: {
-              category: category["value"],
-              date: date,
-            },
-          }
+          category["value"],
+          date,
+          fileName
         );
-
-        console.log(result);
-
-        if (result.status === 200) {
-          // setloading(true);
+        if (result) {
           Alert.alert("File Upload Sucessful!!!!");
           props.navigation.navigate("Student_Portal");
         } else Alert.alert("Try Again Later!!!");
       } catch (error) {
-        console.log(error);
+        console.log("Upload Failed", error);
       }
     }
   };
@@ -98,15 +79,13 @@ function ReasonODForm(props) {
   return (
     <View style={styles.container}>
       <ActivityIndicator visible={loading} />
-      <View>
-        <AppPicker
-          selectedItem={category}
-          onSelectItem={(item) => setCategory(item)}
-          items={categories}
-          placeholder="Reason for Leave"
-          icon="apps"
-        />
-      </View>
+      <AppPicker
+        selectedItem={category}
+        onSelectItem={(item) => setCategory(item)}
+        items={categories}
+        placeholder="Reason for Leave"
+        icon="apps"
+      />
 
       <AppDatePicker setDateTime={setdate} />
       <TouchableOpacity onPress={readDocument} style={styles.addButton}>
@@ -118,7 +97,7 @@ function ReasonODForm(props) {
 
       {documentDetails && (
         <View style={styles.docContainer}>
-          <Text style={{ width: 200, fontSize: 16, color: "white" }}>
+          <Text style={{ width: 200, fontSize: 16, color: "black" }}>
             {documentDetails.name}
           </Text>
           <MaterialCommunityIcons
@@ -132,7 +111,7 @@ function ReasonODForm(props) {
 
       <AppButton
         onPress={handleSubmit}
-        title={"Submit Docs"}
+        title={"Submit Document"}
         color="dodgerblue"
       />
     </View>
@@ -142,7 +121,9 @@ const styles = StyleSheet.create({
   container: {
     padding: 10,
     backgroundColor: "lightgray",
+    display: "flex",
     flex: 1,
+    flexDirection: "column",
   },
   addButton: {
     flexDirection: "row",

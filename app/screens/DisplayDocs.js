@@ -1,119 +1,110 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Text,
   StyleSheet,
   View,
-  ScrollView,
   TouchableOpacity,
   Alert,
+  FlatList,
 } from "react-native";
-import AuthContext from "../auth/context";
-
-import config from "../config/config";
-import { create } from "apisauce";
-
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import * as FileSystem from "expo-file-system";
-import * as Permissions from "expo-permissions";
-import * as MediaLibrary from "expo-media-library";
+import FileApi from "../services/FileService";
+import AppTextInput from "../component/AppTextInput";
 
 export default function DisplayDocs({ route }) {
-  const { authToken } = useContext(AuthContext);
-  const { category } = route.params;
-
   const [files, setfiles] = useState([]);
-  const api = create({
-    baseURL: config["baseUrl"],
-    headers: {
-      Authorization: "Bearer " + authToken,
-    },
-  });
+  const [searchWord, setsearchWord] = useState("");
+  const [filteredFiles, setFilteredFiles] = useState([]);
 
   useEffect(() => {
     getData();
   }, []);
 
+  const handleOnChange = (text) => {
+    setsearchWord(text);
+    if (text) {
+      const filteredFiles = files.filter((item) => {
+        if (item.filename)
+          return item.filename.toLowerCase().includes(text.toLowerCase());
+      });
+      setFilteredFiles(filteredFiles);
+    } else setFilteredFiles(files);
+  };
+
   const getData = async () => {
     let temp = [];
+    const routeParams = route.params;
+
     try {
-      await api
-        .get(config["filesGetEndPoint"])
-        .then((response) => {
-          temp = [...response.data];
-        })
-        .catch(console.log);
-      setfiles(temp);
+      if (routeParams.classId) {
+        const result = await FileApi.getClassroomFiles(routeParams.classId);
+        temp = [...result.data];
+        setfiles(temp);
+        setFilteredFiles(temp);
+      } else {
+        const result = await FileApi.getFiles();
+        temp = [...result.data];
+        setfiles(result.data);
+      }
     } catch (error) {
-      Alert.alert("Try Again Later!!!!");
+      Alert.alert("Error geting files from server!!!");
     }
 
-    console.log(temp);
-
-    if (category) {
+    if (routeParams.category) {
       const result = [];
       for (let item of temp) {
-        if (item["category"] === category) result.push(item);
+        if (item["category"] === routeParams.category) result.push(item);
       }
       setfiles(result);
+      setFilteredFiles(result);
     }
   };
 
   const downloadFile = async (file) => {
-    const fileUri = `${FileSystem.documentDirectory}${file.filename}`;
-    const downloadedFile = await FileSystem.downloadAsync(
-      "http://192.168.0.103:5000/File/download/" + file._id,
-      fileUri,
-      {
-        headers: {
-          Authorization: "Bearer " + authToken,
-        },
-      }
-    );
-
-    if (downloadedFile.status != 200) console.log("Something Went Wrong!!!!");
-    else saveFileAsync(downloadedFile);
-  };
-
-  const saveFileAsync = async (downloadedFile) => {
-    try {
-      const perm = await Permissions.askAsync(Permissions.MEDIA_LIBRARY);
-      if (perm.status != "granted") return;
-      const asset = await MediaLibrary.createAssetAsync(downloadedFile.uri);
-      const album = await MediaLibrary.getAlbumAsync("Download");
-      if (album == null) {
-        await MediaLibrary.createAlbumAsync("Download", asset, false);
-      } else {
-        await MediaLibrary.addAssetsToAlbumAsync([asset], album, false);
-      }
-      Alert.alert("Download Completed");
-    } catch (e) {
-      Alert.alert("Something Went Wrong!!!!");
+    const downloadedFile = await FileApi.downloadFile(file);
+    if (downloadedFile.status != 200) Alert.alert("Something Went Wrong!!!!");
+    else {
+      const result = await FileApi.saveFileAsync(downloadedFile);
+      if (result) return Alert.alert("File downloaded sucessfully!!");
+      Alert.alert("File downloaded unsucessful!!");
     }
   };
 
   return (
-    <ScrollView>
-      <View style={styles.container}>
-        {files.length !== 0 &&
-          files.map((file) => (
-            <View style={styles.fileContainer} key={file.filename}>
-              {file.filename && file.filename ? (
-                <Text style={styles.title}>File Name : {file.filename}</Text>
-              ) : (
-                <Text style={styles.title}>File Name : {file.filepath}</Text>
-              )}
-              <Text style={styles.title}>Date of Submission : {file.date}</Text>
-              <TouchableOpacity onPress={() => downloadFile(file)}>
-                <MaterialCommunityIcons
-                  name="download-circle"
-                  size={40}
-                  color="white"
-                />
-              </TouchableOpacity>
-            </View>
-          ))}
-      </View>
-    </ScrollView>
+    <View style={{ backgroundColor: "lightgray", padding: 5, flex: 1 }}>
+      <AppTextInput
+        placeholder="Search"
+        onChangeText={(e) => handleOnChange(e)}
+        value={searchWord}
+        icon="file-search-outline"
+      />
+      {filteredFiles.length === 0 ? (
+        <Text style={styles.text}>No Files are there</Text>
+      ) : (
+        <>
+          <FlatList
+            style={styles.container}
+            data={filteredFiles}
+            keyExtractor={(item) => item._id}
+            renderItem={({ item }) => (
+              <View style={styles.fileContainer} key={item.filename}>
+                <Text style={styles.title}>File Name : {item.filename}</Text>
+                <Text style={styles.title}>
+                  Date of Submission : {item.date}
+                </Text>
+                <TouchableOpacity onPress={() => downloadFile(item)}>
+                  <MaterialCommunityIcons
+                    name="download-circle"
+                    size={40}
+                    color="white"
+                  />
+                </TouchableOpacity>
+              </View>
+            )}
+          />
+        </>
+      )}
+    </View>
   );
 }
 
@@ -122,8 +113,7 @@ const styles = StyleSheet.create({
     width: "100%",
     height: 170,
     backgroundColor: "dodgerblue",
-    margin: 5,
-    borderRadius: 25,
+    marginVertical: 5,
     padding: 10,
     justifyContent: "center",
     alignItems: "center",
@@ -135,8 +125,12 @@ const styles = StyleSheet.create({
     margin: 3,
   },
   container: {
-    flex: 1,
-    flexDirection: "column",
-    padding: 10,
+    margin: 5,
+  },
+  text: {
+    fontSize: 20,
+    textAlign: "center",
+    top: 50,
+    color: "gray",
   },
 });

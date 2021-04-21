@@ -2,7 +2,6 @@ import React from "react";
 import { Image, View, StyleSheet, TouchableOpacity } from "react-native";
 
 import AppText from "./AppText";
-import color from "../config/colors";
 
 export default function Card({ title, subtitle, image, onPress, style }) {
   return (
@@ -20,10 +19,9 @@ export default function Card({ title, subtitle, image, onPress, style }) {
 
 const styles = StyleSheet.create({
   card: {
-    width: "90%",
-    margin: 20,
+    width: "100%",
+    marginVertical: 5,
     backgroundColor: "dodgerblue",
-    borderRadius: 15,
     overflow: "hidden",
     flex: 1,
     flexDirection: "column",
@@ -45,5 +43,6 @@ const styles = StyleSheet.create({
     marginBottom: 5,
     color: "#fff",
     fontWeight: "bold",
+    fontSize: 20,
   },
 });
