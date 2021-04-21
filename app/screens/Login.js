@@ -101,7 +101,6 @@ function Login(props) {
 const styles = StyleSheet.create({
   container: {
     padding: 10,
-    backgroundColor: "lightgray",
     flex: 1,
   },
   logo: {

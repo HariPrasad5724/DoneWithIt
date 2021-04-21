@@ -1,9 +1,9 @@
 import React from "react";
+import { useContext } from "react-native";
 import { ScrollView, View } from "react-native";
 import Card from "../component/Card";
 
 function Staff_Portal(props) {
-  const { classId } = props.route.params;
   return (
     <ScrollView>
       <View style={{ backgroundColor: "#fff", flex: 1, margin: 10 }}>
@@ -16,7 +16,7 @@ function Staff_Portal(props) {
         <Card
           title="View Documents"
           subtitle="The documents of the students can be accessed here."
-          onPress={() => props.navigation.navigate("DisplayDocs", { classId })}
+          onPress={() => props.navigation.navigate("DisplayDocs")}
         />
       </View>
     </ScrollView>

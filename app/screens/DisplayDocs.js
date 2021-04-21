@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import {
   Text,
   StyleSheet,
@@ -10,11 +10,15 @@ import {
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import FileApi from "../services/FileService";
 import AppTextInput from "../component/AppTextInput";
+import ChooseCategory from "./ChooseCategory";
+import classroomContext from "../context/classroomContext";
 
 export default function DisplayDocs({ route }) {
   const [files, setfiles] = useState([]);
   const [searchWord, setsearchWord] = useState("");
+  const [category, setCategory] = useState();
   const [filteredFiles, setFilteredFiles] = useState([]);
+  const { selectedClass } = useContext(classroomContext);
 
   useEffect(() => {
     getData();
@@ -31,32 +35,28 @@ export default function DisplayDocs({ route }) {
     } else setFilteredFiles(files);
   };
 
-  const getData = async () => {
-    let temp = [];
-    const routeParams = route.params;
+  const onSelectItem = (item) => {
+    setCategory(item);
+    if (item) {
+      const result = files.filter((file) => file.category === item.value);
+      setFilteredFiles(result);
+    } else setFilteredFiles(files);
+  };
 
+  const getData = async () => {
     try {
-      if (routeParams.classId) {
-        const result = await FileApi.getClassroomFiles(routeParams.classId);
-        temp = [...result.data];
-        setfiles(temp);
-        setFilteredFiles(temp);
+      if (selectedClass) {
+        const result = await FileApi.getClassroomFiles(selectedClass);
+        setfiles(result.data);
+        setFilteredFiles(result.data);
       } else {
         const result = await FileApi.getFiles();
-        temp = [...result.data];
         setfiles(result.data);
+        setFilteredFiles(result.data);
       }
     } catch (error) {
       Alert.alert("Error geting files from server!!!");
-    }
-
-    if (routeParams.category) {
-      const result = [];
-      for (let item of temp) {
-        if (item["category"] === routeParams.category) result.push(item);
-      }
-      setfiles(result);
-      setFilteredFiles(result);
+      console.log(error);
     }
   };
 
@@ -71,7 +71,8 @@ export default function DisplayDocs({ route }) {
   };
 
   return (
-    <View style={{ backgroundColor: "lightgray", padding: 5, flex: 1 }}>
+    <View style={{ padding: 5, flex: 1 }}>
+      {/* <ChooseCategory selectedItem={category} onSelectItem={onSelectItem} /> */}
       <AppTextInput
         placeholder="Search"
         onChangeText={(e) => handleOnChange(e)}
@@ -81,28 +82,29 @@ export default function DisplayDocs({ route }) {
       {filteredFiles.length === 0 ? (
         <Text style={styles.text}>No Files are there</Text>
       ) : (
-        <>
-          <FlatList
-            style={styles.container}
-            data={filteredFiles}
-            keyExtractor={(item) => item._id}
-            renderItem={({ item }) => (
-              <View style={styles.fileContainer} key={item.filename}>
-                <Text style={styles.title}>File Name : {item.filename}</Text>
-                <Text style={styles.title}>
-                  Date of Submission : {item.date}
-                </Text>
-                <TouchableOpacity onPress={() => downloadFile(item)}>
-                  <MaterialCommunityIcons
-                    name="download-circle"
-                    size={40}
-                    color="white"
-                  />
-                </TouchableOpacity>
+        <FlatList
+          style={styles.container}
+          data={filteredFiles}
+          keyExtractor={(item) => item._id}
+          renderItem={({ item }) => (
+            <View style={styles.fileContainer} key={item.filename}>
+              <View style={{ padding: 15, width: 250 }}>
+                <Text style={styles.title}> {item.filename}</Text>
+                <Text style={styles.title}>{item.date}</Text>
               </View>
-            )}
-          />
-        </>
+              <TouchableOpacity
+                onPress={() => downloadFile(item)}
+                style={{ left: -5 }}
+              >
+                <MaterialCommunityIcons
+                  name="download-circle"
+                  size={50}
+                  color="white"
+                />
+              </TouchableOpacity>
+            </View>
+          )}
+        />
       )}
     </View>
   );
@@ -111,21 +113,24 @@ export default function DisplayDocs({ route }) {
 const styles = StyleSheet.create({
   fileContainer: {
     width: "100%",
-    height: 170,
+    height: 150,
     backgroundColor: "dodgerblue",
     marginVertical: 5,
-    padding: 10,
+    paddingVertical: 15,
     justifyContent: "center",
     alignItems: "center",
+    flexDirection: "row",
+    borderRadius: 30,
   },
   title: {
     color: "#fff",
     fontSize: 18,
     fontWeight: "bold",
     margin: 3,
+    height: 65,
   },
   container: {
-    margin: 5,
+    margin: 2,
   },
   text: {
     fontSize: 20,

@@ -13,6 +13,7 @@ function ListClasses(props) {
   const [classData, setClassData] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
   const { user } = useContext(AuthContext);
+  const { setSelectedClass } = useContext(classroomContext);
 
   useEffect(() => {
     getData();
@@ -32,7 +33,7 @@ function ListClasses(props) {
   };
 
   return (
-    <classroomContext.Provider value={{ classData, setClassData }}>
+    <>
       {classData && (
         <FlatList
           style={{ margin: 10 }}
@@ -44,11 +45,11 @@ function ListClasses(props) {
               title={"Class Name : " + item.Name}
               subtitle={"Batch : " + item.Batch}
               image={item.image}
-              onPress={() =>
-                props.navigation.navigate("Staff_Portal", {
-                  classId: item._id,
-                })
-              }
+              onPress={() => {
+                setSelectedClass(item._id);
+                console.log(item._id);
+                props.navigation.navigate("Staff_Portal");
+              }}
               renderRightActions={() => (
                 <ListItemDelete onPress={() => handleDelete(item)} />
               )}
@@ -61,8 +62,7 @@ function ListClasses(props) {
           }}
         />
       )}
-      
-    </classroomContext.Provider>
+    </>
   );
 }
 

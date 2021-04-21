@@ -5,48 +5,55 @@ import Card from "../component/Card";
 import ReasonODForm from "./ReasonODForm";
 import DocumentScreen from "./DocumentScreen";
 import DisplayDocs from "./DisplayDocs";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
+import UploadTabButton from "../navigation/UploadTabButton";
+import ProfileScreen from "./ProfileScreen";
 
 const Tab = createBottomTabNavigator();
 
 const TabNavigator = () => (
-  <Tab.Navigator>
-    <Tab.Screen name="Upload" component={ReasonODForm} />
-    <Tab.Screen name="DocumentScreen" component={DisplayDocs} />
+  <Tab.Navigator
+    tabBarOptions={{
+      activeTintColor: "dodgerblue",
+      inactiveTintColor: "gray",
+    }}
+  >
+    <Tab.Screen
+      name="Document Screen"
+      component={DisplayDocs}
+      options={{
+        tabBarIcon: ({ size, color }) => (
+          <MaterialCommunityIcons name="folder" size={size} color={color} />
+        ),
+      }}
+    />
+    <Tab.Screen
+      name="Upload"
+      component={ReasonODForm}
+      options={({ navigation }) => ({
+        tabBarButton: () => (
+          <UploadTabButton onPress={() => navigation.navigate("Upload")} />
+        ),
+      })}
+    />
+    <Tab.Screen
+      name="Profile"
+      component={ProfileScreen}
+      options={{
+        tabBarIcon: ({ size, color }) => (
+          <MaterialCommunityIcons
+            name="account-circle"
+            size={size}
+            color={color}
+          />
+        ),
+      }}
+    />
   </Tab.Navigator>
 );
 
 function Student_Portal(props) {
-  return (
-    <ScrollView>
-      <View style={{ backgroundColor: "#fff", margin: 10 }}>
-        <Card
-          title="Upload Document"
-          subtitle="Upload your documents here and make sure You have the document as PDF "
-          image={require("../../assets/upload.png")}
-          onPress={() => props.navigation.navigate("OD_Form")}
-        />
-        <Card
-          title="Display Personal Docs"
-          onPress={() =>
-            props.navigation.navigate("DisplayDocs", { category: "PD" })
-          }
-        />
-        <Card
-          title="Display OnDuty Docs"
-          onPress={() =>
-            props.navigation.navigate("DisplayDocs", { category: "OD" })
-          }
-        />
-        <Card
-          title="Display Other Docs"
-          onPress={() =>
-            props.navigation.navigate("DisplayDocs", { category: "OTHERS" })
-          }
-        />
-      </View>
-    </ScrollView>
-    // <TabNavigator />
-  );
+  return <TabNavigator />;
 }
 
 export default Student_Portal;

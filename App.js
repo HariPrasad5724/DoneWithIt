@@ -4,9 +4,12 @@ import AuthContext from "./app/auth/context";
 import authStorage from "./app/services/authStorage";
 import jwtDecode from "jwt-decode";
 import AppLoading from "expo-app-loading";
+import classroomContext from "./app/context/classroomContext";
 
 export default function App(props) {
   const [user, setUser] = useState();
+  const [selectedClass, setSelectedClass] = useState("");
+
   const [isReady, setIsReady] = useState(false);
 
   const restoreToken = async () => {
@@ -26,7 +29,9 @@ export default function App(props) {
 
   return (
     <AuthContext.Provider value={{ user, setUser }}>
-      <LoginNavigation />
+      <classroomContext.Provider value={{ selectedClass, setSelectedClass }}>
+        <LoginNavigation />
+      </classroomContext.Provider>
     </AuthContext.Provider>
   );
 }

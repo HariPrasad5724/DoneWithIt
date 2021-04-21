@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { View, StyleSheet, Text, TouchableOpacity, Alert } from "react-native";
 
 import AppButton from "../component/AppButton";
-import AppPicker from "../component/AppPicker";
 import AppText from "../component/AppText";
 import AppDatePicker from "../component/AppDatePicker";
 
@@ -10,27 +9,10 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import * as DocumentPicker from "expo-document-picker";
 import ActivityIndicator from "../component/ActivityIndicator";
 import FileService from "../services/FileService";
-
-const categories = [
-  {
-    id: 1,
-    label: "Personal Documents",
-    value: "PD",
-  },
-  {
-    id: 2,
-    label: "On Duty",
-    value: "OD",
-  },
-  {
-    id: 3,
-    label: "Others",
-    value: "OTHERS",
-  },
-];
+import ChooseCategory from "./ChooseCategory";
 
 function ReasonODForm(props) {
-  const [category, setCategory] = useState(categories[0]);
+  const [category, setCategory] = useState();
   const [date, setdate] = useState();
   const [documentDetails, setdocumentDetails] = useState();
   const [loading, setloading] = useState(false);
@@ -49,16 +31,12 @@ function ReasonODForm(props) {
 
   const handleSubmit = async () => {
     console.log(documentDetails);
-    if (date === undefined) {
-      Alert.alert("Select Date Field!!!!");
-    } else if (
-      documentDetails === undefined ||
-      documentDetails["type"] === "cancel"
-    ) {
-      Alert.alert("Select A Document to upload !!!");
-    } else {
+    if (category === undefined) return Alert.alert("Select Category Field!!!!");
+    if (date === undefined) return Alert.alert("Select Date Field!!!!");
+    if (documentDetails === undefined || documentDetails["type"] === "cancel")
+      return Alert.alert("Select A Document to upload !!!");
+    else {
       const fileName = documentDetails["name"].split(".")[0];
-      console.log(fileName);
       try {
         const result = await FileService.uploadFile(
           documentDetails["uri"],
@@ -79,12 +57,10 @@ function ReasonODForm(props) {
   return (
     <View style={styles.container}>
       <ActivityIndicator visible={loading} />
-      <AppPicker
+
+      <ChooseCategory
         selectedItem={category}
         onSelectItem={(item) => setCategory(item)}
-        items={categories}
-        placeholder="Reason for Leave"
-        icon="apps"
       />
 
       <AppDatePicker setDateTime={setdate} />
@@ -104,7 +80,7 @@ function ReasonODForm(props) {
             onPress={() => setdocumentDetails(undefined)}
             name="close"
             size={30}
-            color="white"
+            color="black"
           />
         </View>
       )}
@@ -120,7 +96,6 @@ function ReasonODForm(props) {
 const styles = StyleSheet.create({
   container: {
     padding: 10,
-    backgroundColor: "lightgray",
     display: "flex",
     flex: 1,
     flexDirection: "column",
@@ -131,7 +106,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     borderRadius: 10,
     width: "100%",
-    height: 70,
+    height: 60,
     backgroundColor: "dodgerblue",
   },
   docContainer: {
@@ -139,9 +114,10 @@ const styles = StyleSheet.create({
     height: 100,
     borderWidth: 2,
     borderRadius: 10,
-    borderColor: "white",
+    borderColor: "black",
     flex: 0.2,
     margin: 10,
+    padding: 10,
     justifyContent: "center",
     alignItems: "center",
     fontSize: 24,

@@ -6,21 +6,21 @@ export default function ChooseCategory({ onSelectItem, selectedItem }) {
   const categories = [
     {
       id: 1,
-      label: "Personal Documents",
+      label: "Personal Document",
       value: "PD",
     },
     {
       id: 2,
-      label: "On Duty",
+      label: "On Duty Document",
       value: "OD",
     },
     {
       id: 3,
-      label: "Others",
+      label: "Others Document",
       value: "OTHERS",
     },
   ];
-  const [category, setCategory] = useState(categories[0]);
+  const [category, setCategory] = useState(categories[3]);
 
   const handleSelect = (id) => {
     console.log(id);
@@ -28,10 +28,10 @@ export default function ChooseCategory({ onSelectItem, selectedItem }) {
   return (
     <View>
       <AppPicker
-        selectedItem={category}
-        onSelectItem={(item) => setCategory(item)}
+        selectedItem={selectedItem}
+        onSelectItem={onSelectItem}
         items={categories}
-        placeholder="Reason for Leave"
+        placeholder="Category"
         icon="apps"
       />
     </View>

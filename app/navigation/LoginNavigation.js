@@ -13,12 +13,13 @@ import ListStudents from "../screens/ListStudents";
 import DisplayDocs from "../screens/DisplayDocs";
 import ListUserDocs from "../screens/ListUserDocs";
 import ForgotPassword from "../screens/ForgotPassword";
+import NavigationTheme from "./NavigationTheme";
 
 const Stack = createStackNavigator();
 
 export default function LoginNavigation(props) {
   return (
-    <NavigationContainer>
+    <NavigationContainer theme={NavigationTheme}>
       <Stack.Navigator>
         <Stack.Screen
           name="Welcome"
