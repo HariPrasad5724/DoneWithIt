@@ -30,6 +30,9 @@ function ProfileScreen(props) {
         title="logout"
         color="tomato"
         style={{ alignSelf: "flex-end" }}
+        onPress={() => {
+          props.navigation.navigate("Login");
+        }}
       />
     </View>
   );
