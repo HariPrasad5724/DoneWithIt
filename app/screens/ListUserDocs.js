@@ -54,7 +54,7 @@ export default function ListUserDocs(props) {
         setFilteredFiles(result.data);
       }
     } catch (error) {
-      Alert.alert("Error geting files from server!!!");
+      Alert.alert("Error getting files from server!!!");
       console.log(error);
     }
   };
@@ -64,8 +64,8 @@ export default function ListUserDocs(props) {
     if (downloadedFile.status != 200) Alert.alert("Something Went Wrong!!!!");
     else {
       const result = await FileApi.saveFileAsync(downloadedFile);
-      if (result) return Alert.alert("File downloaded sucessfully!!");
-      Alert.alert("File downloaded unsucessful!!");
+      if (result) return Alert.alert("File downloaded successfully!!");
+      Alert.alert("File downloaded unsuccessful!!");
     }
   };
 
