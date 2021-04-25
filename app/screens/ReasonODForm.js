@@ -82,7 +82,6 @@ function ReasonODForm(props) {
         title={"Submit Document"}
         color={color.green}
       />
-      s
     </View>
   );
 }

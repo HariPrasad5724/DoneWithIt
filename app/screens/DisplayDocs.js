@@ -20,7 +20,7 @@ export default function DisplayDocs({ route }) {
   const [category, setCategory] = useState();
   const [filteredFiles, setFilteredFiles] = useState([]);
   const { selectedClass } = useContext(classroomContext);
-
+  const [refreshing, setRefreshing] = useState(false);
   const { user } = useContext(AuthContext);
 
   useEffect(() => {
@@ -140,6 +140,10 @@ export default function DisplayDocs({ route }) {
               </View>
             </View>
           )}
+          refreshing={refreshing}
+          onRefresh={() => {
+            setFilteredFiles(getData);
+          }}
         />
       )}
     </View>
