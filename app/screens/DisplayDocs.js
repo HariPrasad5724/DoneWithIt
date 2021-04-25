@@ -5,6 +5,7 @@ import {
   View,
   TouchableOpacity,
   Alert,
+  Swipeable,
   FlatList,
 } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
@@ -12,6 +13,7 @@ import FileApi from "../services/FileService";
 import AppTextInput from "../component/AppTextInput";
 import ChooseCategory from "./ChooseCategory";
 import classroomContext from "../context/classroomContext";
+import ListItemDelete from "../component/ListItemDelete";
 
 export default function DisplayDocs({ route }) {
   const [files, setfiles] = useState([]);
@@ -23,6 +25,10 @@ export default function DisplayDocs({ route }) {
   useEffect(() => {
     getData();
   }, []);
+
+  const handleDelete = (selectedDocs) => {
+    setfiles(files.filter((allFiles) => allFiles.id !== selectedDocs.id));
+  };
 
   const handleOnChange = (text) => {
     setsearchWord(text);
@@ -87,22 +93,28 @@ export default function DisplayDocs({ route }) {
           data={filteredFiles}
           keyExtractor={(item) => item._id}
           renderItem={({ item }) => (
-            <View style={styles.fileContainer} key={item.filename}>
-              <View style={{ padding: 15, width: 250 }}>
-                <Text style={styles.title}> {item.filename}</Text>
-                <Text style={styles.title}>{item.date}</Text>
+            <Swipeable
+              renderRightActions={() => (
+                <ListItemDelete onPress={() => handleDelete(item)} />
+              )}
+            >
+              <View style={styles.fileContainer} key={item.filename}>
+                <View style={{ padding: 15, width: 250 }}>
+                  <Text style={styles.title}> {item.filename}</Text>
+                  <Text style={styles.title}>{item.date}</Text>
+                </View>
+                <TouchableOpacity
+                  onPress={() => downloadFile(item)}
+                  style={{ left: -5 }}
+                >
+                  <MaterialCommunityIcons
+                    name="download-circle"
+                    size={50}
+                    color="white"
+                  />
+                </TouchableOpacity>
               </View>
-              <TouchableOpacity
-                onPress={() => downloadFile(item)}
-                style={{ left: -5 }}
-              >
-                <MaterialCommunityIcons
-                  name="download-circle"
-                  size={50}
-                  color="white"
-                />
-              </TouchableOpacity>
-            </View>
+            </Swipeable>
           )}
         />
       )}

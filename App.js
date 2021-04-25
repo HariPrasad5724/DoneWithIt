@@ -5,6 +5,7 @@ import authStorage from "./app/services/authStorage";
 import jwtDecode from "jwt-decode";
 import AppLoading from "expo-app-loading";
 import classroomContext from "./app/context/classroomContext";
+import DisplayDocs from "./app/screens/DisplayDocs";
 
 export default function App(props) {
   const [user, setUser] = useState();
