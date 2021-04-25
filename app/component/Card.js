@@ -1,5 +1,6 @@
 import React from "react";
 import { Image, View, StyleSheet, TouchableOpacity } from "react-native";
+import colors from "../config/colors";
 
 import AppText from "./AppText";
 
@@ -9,7 +10,7 @@ export default function Card({ title, subtitle, image, onPress, style }) {
       <View style={[styles.card, style]}>
         {image && <Image style={styles.image} source={image} />}
         <View style={styles.textContainer}>
-          <AppText style={styles.title}>{title}</AppText>
+          <AppText style={styles.title}>{title.toUpperCase()}</AppText>
           <AppText style={styles.subtitle}>{subtitle}</AppText>
         </View>
       </View>
@@ -21,7 +22,7 @@ const styles = StyleSheet.create({
   card: {
     width: "100%",
     marginVertical: 5,
-    backgroundColor: "dodgerblue",
+    backgroundColor: colors.dark,
     overflow: "hidden",
     flex: 1,
     flexDirection: "column",

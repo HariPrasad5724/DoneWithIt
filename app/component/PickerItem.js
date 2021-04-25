@@ -13,5 +13,7 @@ export default function PickerItem({ label, onPress }) {
 const styles = StyleSheet.create({
   text: {
     padding: 20,
+    fontWeight: "bold",
+    fontSize: 20,
   },
 });

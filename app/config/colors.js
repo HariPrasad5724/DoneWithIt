@@ -7,5 +7,8 @@ export default {
   medium: "#6e6969",
   light: "#f8f4f4",
   danger: "#ff5252",
-  dark: "#0c0c0c",
+  dark: "#343a40",
+  green: "#2a9d8f",
+  red: "#e5383b",
+  blue: "dodgerblue",
 };

@@ -4,6 +4,7 @@ import DateTimePicker from "@react-native-community/datetimepicker";
 
 import AppButton from "./AppButton";
 import AppText from "./AppText";
+import color from "../config/colors";
 
 function AppDatePicker({ dateTitle, timeTitle, setDateTime }) {
   const [date, setDate] = useState(Date.now());
@@ -53,6 +54,7 @@ function AppDatePicker({ dateTitle, timeTitle, setDateTime }) {
           title="Date"
           style={styles.button}
           icon="calendar"
+          color={color.dark}
         />
         <AppText style={styles.text}>{value}</AppText>
       </View>
@@ -74,15 +76,14 @@ export default AppDatePicker;
 
 const styles = StyleSheet.create({
   text: {
-    height: 50,
-    fontSize: 20,
-    width: 200,
-    backgroundColor: "lightgray",
     height: 60,
-    marginVertical: 5,
-    borderRadius: 10,
-    padding: 5,
-    fontWeight: "900",
+    fontSize: 20,
+    width: 250,
+    paddingVertical: 12,
+    backgroundColor: color.light,
+    borderRadius: 30,
+    fontWeight: "bold",
+    textAlign: "center",
   },
   container: {
     flex: 1,
@@ -91,5 +92,9 @@ const styles = StyleSheet.create({
     margin: 10,
     height: 200,
   },
-  button: { margin: 0, width: 100, marginRight: 5 },
+  button: {
+    margin: 0,
+    width: 100,
+    marginRight: 5,
+  },
 });

@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Text,
   StyleSheet,
@@ -8,10 +8,8 @@ import {
   FlatList,
 } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import FileApi from "../services/FileService";  
+import FileApi from "../services/FileService";
 import AppTextInput from "../component/AppTextInput";
-import ChooseCategory from "./ChooseCategory";
-import classroomContext from "../context/classroomContext";
 
 export default function ListUserDocs(props) {
   const [files, setfiles] = useState([]);
@@ -19,7 +17,7 @@ export default function ListUserDocs(props) {
   const [category, setCategory] = useState();
   const [filteredFiles, setFilteredFiles] = useState([]);
   const { class_id, student_id } = props.route.params;
-  console.log({ class_id, student_id })
+  console.log({ class_id, student_id });
   useEffect(() => {
     getData();
   }, []);
@@ -46,10 +44,10 @@ export default function ListUserDocs(props) {
   const getData = async () => {
     try {
       if (student_id) {
-        const result = await FileApi.getStudentFiles(class_id,student_id);
+        const result = await FileApi.getStudentFiles(class_id, student_id);
         setfiles(result.data);
         setFilteredFiles(result.data);
-        console.log(result)
+        console.log(result);
       } else {
         const result = await FileApi.getFiles();
         setfiles(result.data);
@@ -88,21 +86,35 @@ export default function ListUserDocs(props) {
           data={filteredFiles}
           keyExtractor={(item) => item._id}
           renderItem={({ item }) => (
-            <View style={styles.fileContainer} >
-              <View style={{ padding: 15, width: 250 }}>
-                <Text style={styles.title}> {item.filename}</Text>
+            <View style={styles.fileContainer} key={item.filename}>
+              <View
+                style={{
+                  height: 70,
+                  margin: 5,
+                  width: 250,
+                }}
+              >
+                <Text style={styles.title} numberOfLines={1}>
+                  {item.filename.toUpperCase()}
+                </Text>
                 <Text style={styles.title}>{item.date}</Text>
               </View>
-              <TouchableOpacity
-                onPress={() => downloadFile(item)}
-                style={{ left: -5 }}
+              <View
+                style={{
+                  flexDirection: "row",
+                  width: "50%",
+                  height: 50,
+                  justifyContent: "space-evenly",
+                }}
               >
-                <MaterialCommunityIcons
-                  name="download-circle"
-                  size={50}
-                  color="white"
-                />
-              </TouchableOpacity>
+                <TouchableOpacity onPress={() => downloadFile(item)}>
+                  <MaterialCommunityIcons
+                    name="download-circle"
+                    size={50}
+                    color="#52b788"
+                  />
+                </TouchableOpacity>
+              </View>
             </View>
           )}
         />
@@ -115,20 +127,21 @@ const styles = StyleSheet.create({
   fileContainer: {
     width: "100%",
     height: 150,
-    backgroundColor: "dodgerblue",
+    backgroundColor: "#343a40",
     marginVertical: 5,
-    paddingVertical: 15,
-    justifyContent: "center",
+    padding: 5,
+    borderRadius: 5,
+    flexDirection: "column",
     alignItems: "center",
-    flexDirection: "row",
-    borderRadius: 30,
+    justifyContent: "center",
   },
   title: {
     color: "#fff",
     fontSize: 18,
     fontWeight: "bold",
+    textAlign: "center",
+    color: "#f8f9fa",
     margin: 3,
-    height: 65,
   },
   container: {
     margin: 2,

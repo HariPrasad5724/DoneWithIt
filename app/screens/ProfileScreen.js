@@ -2,15 +2,17 @@ import React, { useContext } from "react";
 import { View, StyleSheet, Text } from "react-native";
 import AuthContext from "../auth/context";
 import AppButton from "../component/AppButton";
+import colors from "../config/colors";
+import authStorage from "../services/authStorage";
 
 function ProfileScreen(props) {
   const { user } = useContext(AuthContext);
   console.log(user);
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Profile</Text>
+      <Text style={styles.title}>PROFILE</Text>
       <View style={{ flexDirection: "row", alignItems: "center" }}>
-        <Text style={styles.text}>Register Number </Text>
+        <Text style={styles.text}>Roll No </Text>
         <Text style={styles.subText}>{user.RegisterNo}</Text>
       </View>
       <View style={{ flexDirection: "row", alignItems: "center" }}>
@@ -28,10 +30,11 @@ function ProfileScreen(props) {
 
       <AppButton
         title="logout"
-        color="tomato"
+        color={colors.red}
         style={{ alignSelf: "flex-end" }}
         onPress={() => {
           props.navigation.navigate("Login");
+          authStorage.removeToken();
         }}
       />
     </View>
@@ -53,7 +56,7 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     margin: 10,
     textAlign: "left",
-    color: "tomato",
+    color: colors.dark,
     fontWeight: "bold",
   },
   subText: {
@@ -67,8 +70,9 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 30,
-    color: "dodgerblue",
+    color: colors.blue,
     textAlign: "left",
     fontWeight: "bold",
+    marginBottom: 20,
   },
 });

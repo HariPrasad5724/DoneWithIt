@@ -10,6 +10,7 @@ import * as DocumentPicker from "expo-document-picker";
 import ActivityIndicator from "../component/ActivityIndicator";
 import FileService from "../services/FileService";
 import ChooseCategory from "./ChooseCategory";
+import color from "../config/colors";
 
 function ReasonODForm(props) {
   const [category, setCategory] = useState();
@@ -57,20 +58,12 @@ function ReasonODForm(props) {
   return (
     <View style={styles.container}>
       <ActivityIndicator visible={loading} />
-
       <ChooseCategory
         selectedItem={category}
         onSelectItem={(item) => setCategory(item)}
       />
-
       <AppDatePicker setDateTime={setdate} />
-      <TouchableOpacity onPress={readDocument} style={styles.addButton}>
-        <MaterialCommunityIcons name="paperclip" size={28} color="white" />
-        <AppText style={{ fontSize: 18, color: "white", fontWeight: "bold" }}>
-          Add
-        </AppText>
-      </TouchableOpacity>
-
+      <AppButton onPress={readDocument} title={"Add"} color={color.dark} />
       {documentDetails && (
         <View style={styles.docContainer}>
           <Text style={{ width: 200, fontSize: 16, color: "black" }}>
@@ -84,12 +77,12 @@ function ReasonODForm(props) {
           />
         </View>
       )}
-
       <AppButton
         onPress={handleSubmit}
         title={"Submit Document"}
-        color="dodgerblue"
+        color={color.green}
       />
+      s
     </View>
   );
 }
@@ -100,15 +93,7 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: "column",
   },
-  addButton: {
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
-    borderRadius: 10,
-    width: "100%",
-    height: 60,
-    backgroundColor: "dodgerblue",
-  },
+
   docContainer: {
     width: "95%",
     height: 100,

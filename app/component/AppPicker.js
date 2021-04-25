@@ -14,6 +14,7 @@ import defaultStyles from "../config/defaultStyles";
 import AppText from "./AppText";
 import Screen from "./Screen";
 import PickerItem from "./PickerItem";
+import ListItemSeperator from "./ListItemSeperator";
 
 export default function AppPicker({
   icon,
@@ -46,8 +47,19 @@ export default function AppPicker({
         </View>
       </TouchableWithoutFeedback>
       <Modal visible={modelVisible} animationType="slide">
-        <Screen>
-          <Button title="close" onPress={() => setModalVisible(false)} />
+        <Screen
+          style={{
+            justifyContent: "center",
+            alignItems: "center",
+            flexDirection: "column",
+          }}
+        >
+          <MaterialCommunityIcons
+            name="close"
+            onPress={() => setModalVisible(false)}
+            size={50}
+          />
+          <ListItemSeperator />
           <FlatList
             data={items}
             keyExtractor={(item) => item.value.toString()}

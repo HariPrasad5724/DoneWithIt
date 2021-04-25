@@ -5,13 +5,14 @@ import DisplayDocs from "./DisplayDocs";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import UploadTabButton from "../navigation/UploadTabButton";
 import ProfileScreen from "./ProfileScreen";
+import color from "../config/colors";
 
 const Tab = createBottomTabNavigator();
 
 const TabNavigator = () => (
   <Tab.Navigator
     tabBarOptions={{
-      activeTintColor: "dodgerblue",
+      activeTintColor: color.black,
       inactiveTintColor: "gray",
     }}
   >

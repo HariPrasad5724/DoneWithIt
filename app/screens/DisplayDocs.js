@@ -5,7 +5,6 @@ import {
   View,
   TouchableOpacity,
   Alert,
-  Swipeable,
   FlatList,
 } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
@@ -13,7 +12,7 @@ import FileApi from "../services/FileService";
 import AppTextInput from "../component/AppTextInput";
 import ChooseCategory from "./ChooseCategory";
 import classroomContext from "../context/classroomContext";
-import ListItemDelete from "../component/ListItemDelete";
+import AuthContext from "../auth/context";
 
 export default function DisplayDocs({ route }) {
   const [files, setfiles] = useState([]);
@@ -21,6 +20,8 @@ export default function DisplayDocs({ route }) {
   const [category, setCategory] = useState();
   const [filteredFiles, setFilteredFiles] = useState([]);
   const { selectedClass } = useContext(classroomContext);
+
+  const { user } = useContext(AuthContext);
 
   useEffect(() => {
     getData();
@@ -61,12 +62,10 @@ export default function DisplayDocs({ route }) {
         const result = await FileApi.getClassroomFiles(selectedClass);
         setfiles(result.data);
         setFilteredFiles(result.data);
-        console.log(result);
       } else {
         const result = await FileApi.getFiles();
         setfiles(result.data);
         setFilteredFiles(result.data);
-        console.log(result.data);
       }
     } catch (error) {
       console.log(error);
@@ -86,7 +85,7 @@ export default function DisplayDocs({ route }) {
 
   return (
     <View style={{ padding: 5, flex: 1 }}>
-      {/* <ChooseCategory selectedItem={category} onSelectItem={onSelectItem} /> */}
+      <ChooseCategory selectedItem={category} onSelectItem={onSelectItem} />
       <AppTextInput
         placeholder="Search"
         onChangeText={(e) => handleOnChange(e)}
@@ -96,37 +95,49 @@ export default function DisplayDocs({ route }) {
       {filteredFiles.length === 0 ? (
         <Text style={styles.text}>No Files are there</Text>
       ) : (
-        // <Text style={styles.text}>Files are there</Text>
         <FlatList
           style={styles.container}
           data={filteredFiles}
           keyExtractor={(item) => item._id}
           renderItem={({ item }) => (
             <View style={styles.fileContainer} key={item.filename}>
-              <View style={{ padding: 15, width: 250 }}>
-                <Text style={styles.title}> {item.filename}</Text>
+              <View
+                style={{
+                  height: 70,
+                  margin: 5,
+                  width: 250,
+                }}
+              >
+                <Text style={styles.title} numberOfLines={1}>
+                  {item.filename.toUpperCase()}
+                </Text>
                 <Text style={styles.title}>{item.date}</Text>
               </View>
-              <TouchableOpacity
-                onPress={() => downloadFile(item)}
-                style={{ left: -5 }}
+              <View
+                style={{
+                  flexDirection: "row",
+                  width: "50%",
+                  height: 50,
+                  justifyContent: "space-evenly",
+                }}
               >
-                <MaterialCommunityIcons
-                  name="download-circle"
-                  size={50}
-                  color="white"
-                />
-              </TouchableOpacity>
-              <TouchableOpacity
-                onPress={() => handleDelete(item._id)}
-                style={{ left: -5 }}
-              >
-                <MaterialCommunityIcons
-                  name="close-circle"
-                  size={50}
-                  color="white"
-                />
-              </TouchableOpacity>
+                <TouchableOpacity onPress={() => downloadFile(item)}>
+                  <MaterialCommunityIcons
+                    name="download-circle"
+                    size={50}
+                    color="#52b788"
+                  />
+                </TouchableOpacity>
+                {!user.isStaff && (
+                  <TouchableOpacity onPress={() => handleDelete(item._id)}>
+                    <MaterialCommunityIcons
+                      name="close-circle"
+                      size={50}
+                      color="#e5383b"
+                    />
+                  </TouchableOpacity>
+                )}
+              </View>
             </View>
           )}
         />
@@ -139,20 +150,21 @@ const styles = StyleSheet.create({
   fileContainer: {
     width: "100%",
     height: 150,
-    backgroundColor: "dodgerblue",
+    backgroundColor: "#343a40",
     marginVertical: 5,
-    paddingVertical: 15,
-    justifyContent: "center",
-    alignItems: "center",
-    flexDirection: "row",
+    padding: 5,
     borderRadius: 5,
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "center",
   },
   title: {
     color: "#fff",
     fontSize: 18,
     fontWeight: "bold",
+    textAlign: "center",
+    color: "#f8f9fa",
     margin: 3,
-    height: 65,
   },
   container: {
     margin: 2,

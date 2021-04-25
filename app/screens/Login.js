@@ -11,6 +11,7 @@ import ErrorMessage from "./ErrorMessage";
 import AuthContext from "../auth/context";
 import authApi from "../services/auth";
 import authStorage from "../services/authStorage";
+import colors from "../config/colors";
 
 const validationSchema = Yup.object().shape({
   Email: Yup.string().required().email().label("Email"),
@@ -90,7 +91,7 @@ function Login(props) {
             <AppButton
               onPress={() => props.navigation.navigate("ForgotPassword")}
               title="Forgot Password"
-              color="tomato"
+              color={colors.red}
             />
           </>
         )}
