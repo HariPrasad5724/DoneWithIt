@@ -33,7 +33,7 @@ function ProfileScreen(props) {
         color={colors.red}
         style={{ alignSelf: "flex-end" }}
         onPress={() => {
-          props.navigation.navigate("Login");
+          props.navigation.navigate("Welcome");
           authStorage.removeToken();
         }}
       />

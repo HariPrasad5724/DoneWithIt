@@ -33,7 +33,7 @@ function Login(props) {
         authContext.setUser(jwtDecode(result.data));
         authStorage.storeToken(result.data);
         if (jwtDecode(result.data).isStaff)
-          props.navigation.navigate("Display_Class");
+          props.navigation.navigate("Staff_Home");
         else props.navigation.navigate("Student_Portal");
       }
     } catch (error) {

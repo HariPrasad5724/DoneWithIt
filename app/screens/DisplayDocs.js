@@ -69,7 +69,7 @@ export default function DisplayDocs({ route }) {
       }
     } catch (error) {
       console.log(error);
-      Alert.alert("Error geting files from server!!!");
+      Alert.alert("Error getting files from server!!!");
     }
   };
 
@@ -78,8 +78,8 @@ export default function DisplayDocs({ route }) {
     if (downloadedFile.status != 200) Alert.alert("Something Went Wrong!!!!");
     else {
       const result = await FileApi.saveFileAsync(downloadedFile);
-      if (result) return Alert.alert("File downloaded sucessfully!!");
-      Alert.alert("File downloaded unsucessful!!");
+      if (result) return Alert.alert("File downloaded successfully!!");
+      Alert.alert("File download is unsuccessful!!");
     }
   };
 
