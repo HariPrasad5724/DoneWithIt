@@ -34,6 +34,8 @@ function ListStudents(props) {
       console.log("Error getting students list ", error);
     }
   };
+  const {class_id} = props.route.params;
+  console.log({class_id})
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Students</Text>
@@ -52,7 +54,8 @@ function ListStudents(props) {
             !item.isStaff && (
               <Card
                 title={"Name : " + item.Name}
-                subtitle={"Register No : " + item.RegisterNo}
+                subtitle={"Register No : " + item._id}
+                onPress={() => props.navigation.navigate("ListUserDocs",{class_id,student_id:item._id})}
               />
             )
           }

@@ -64,6 +64,14 @@ const getClassroomFiles = async (classId) => {
   }
 };
 
+const getStudentFiles = async (classId,studId) => {
+  try {
+    return await apiClient.get(config["studentFilesEndPoint"] + classId + "/" + studId );
+  } catch (error) {
+    console.log("Error in getting files from server", Error);
+  }
+};
+
 const downloadFile = async (file) => {
   try {
     const authToken = await authStorage.getToken();
@@ -108,4 +116,5 @@ export default {
   downloadFile,
   saveFileAsync,
   uploadFile,
+  getStudentFiles,
 };

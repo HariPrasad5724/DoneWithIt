@@ -7,5 +7,6 @@
   "fileUploadEndPoint": "File/upload",
   "fileDownloadEndPoint": "File/download/",
   "filesGetEndPoint": "File/getfiles",
-  "classfilesGetEndPoint": "File/Staff/getallfiles/"
+  "classfilesGetEndPoint": "File/Staff/getallfiles/",
+  "studentFilesEndPoint": "File/Staff/getfiles/"
 }

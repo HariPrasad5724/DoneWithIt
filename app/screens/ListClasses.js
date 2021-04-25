@@ -48,7 +48,7 @@ function ListClasses(props) {
               onPress={() => {
                 setSelectedClass(item._id);
                 console.log(item._id);
-                props.navigation.navigate("Staff_Portal");
+                props.navigation.navigate("Staff_Portal",{class_id:item._id});
               }}
               renderRightActions={() => (
                 <ListItemDelete onPress={() => handleDelete(item)} />
