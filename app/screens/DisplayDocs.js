@@ -9,7 +9,7 @@ import {
   FlatList,
 } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import FileApi from "../services/FileService";  
+import FileApi from "../services/FileService";
 import AppTextInput from "../component/AppTextInput";
 import ChooseCategory from "./ChooseCategory";
 import classroomContext from "../context/classroomContext";
@@ -26,8 +26,14 @@ export default function DisplayDocs({ route }) {
     getData();
   }, []);
 
-  const handleDelete = (selectedDocs) => {
-    setfiles(files.filter((allFiles) => allFiles.id !== selectedDocs.id));
+  const handleDelete = async (fileId) => {
+    console.log(fileId);
+    try {
+      const result = await FileApi.deleteFiles(fileId);
+      Alert.alert(result.data);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const handleOnChange = (text) => {
@@ -55,14 +61,16 @@ export default function DisplayDocs({ route }) {
         const result = await FileApi.getClassroomFiles(selectedClass);
         setfiles(result.data);
         setFilteredFiles(result.data);
+        console.log(result);
       } else {
         const result = await FileApi.getFiles();
         setfiles(result.data);
         setFilteredFiles(result.data);
+        console.log(result.data);
       }
     } catch (error) {
-      Alert.alert("Error geting files from server!!!");
       console.log(error);
+      Alert.alert("Error geting files from server!!!");
     }
   };
 
@@ -88,33 +96,38 @@ export default function DisplayDocs({ route }) {
       {filteredFiles.length === 0 ? (
         <Text style={styles.text}>No Files are there</Text>
       ) : (
+        // <Text style={styles.text}>Files are there</Text>
         <FlatList
           style={styles.container}
           data={filteredFiles}
           keyExtractor={(item) => item._id}
           renderItem={({ item }) => (
-            <Swipeable
-              renderRightActions={() => (
-                <ListItemDelete onPress={() => handleDelete(item)} />
-              )}
-            >
-              <View style={styles.fileContainer} key={item.filename}>
-                <View style={{ padding: 15, width: 250 }}>
-                  <Text style={styles.title}> {item.filename}</Text>
-                  <Text style={styles.title}>{item.date}</Text>
-                </View>
-                <TouchableOpacity
-                  onPress={() => downloadFile(item)}
-                  style={{ left: -5 }}
-                >
-                  <MaterialCommunityIcons
-                    name="download-circle"
-                    size={50}
-                    color="white"
-                  />
-                </TouchableOpacity>
+            <View style={styles.fileContainer} key={item.filename}>
+              <View style={{ padding: 15, width: 250 }}>
+                <Text style={styles.title}> {item.filename}</Text>
+                <Text style={styles.title}>{item.date}</Text>
               </View>
-            </Swipeable>
+              <TouchableOpacity
+                onPress={() => downloadFile(item)}
+                style={{ left: -5 }}
+              >
+                <MaterialCommunityIcons
+                  name="download-circle"
+                  size={50}
+                  color="white"
+                />
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => handleDelete(item._id)}
+                style={{ left: -5 }}
+              >
+                <MaterialCommunityIcons
+                  name="close-circle"
+                  size={50}
+                  color="white"
+                />
+              </TouchableOpacity>
+            </View>
           )}
         />
       )}
@@ -132,7 +145,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     flexDirection: "row",
-    borderRadius: 30,
+    borderRadius: 5,
   },
   title: {
     color: "#fff",

@@ -27,6 +27,7 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     justifyContent: "center",
     alignItems: "center",
+    borderRadius: 5,
   },
   image: {
     height: 100,

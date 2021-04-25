@@ -6,6 +6,7 @@
   "userEndPoint": "User",
   "fileUploadEndPoint": "File/upload",
   "fileDownloadEndPoint": "File/download/",
+  "fileDeleteEndPoint": "File/",
   "filesGetEndPoint": "File/getfiles",
   "classfilesGetEndPoint": "File/Staff/getallfiles/",
   "studentFilesEndPoint": "File/Staff/getfiles/"

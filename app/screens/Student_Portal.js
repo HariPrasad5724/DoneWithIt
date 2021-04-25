@@ -1,9 +1,6 @@
 import React from "react";
-import { ScrollView, View, Text } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import Card from "../component/Card";
 import ReasonODForm from "./ReasonODForm";
-import DocumentScreen from "./DocumentScreen";
 import DisplayDocs from "./DisplayDocs";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import UploadTabButton from "../navigation/UploadTabButton";

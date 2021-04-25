@@ -9,6 +9,8 @@ function ListStudents(props) {
   const [searchWord, setsearchWord] = useState("");
   const [filteredUsers, setFilteredUsers] = useState([]);
 
+  const { class_id } = props.route.params;
+
   useEffect(() => {
     getData();
   }, []);
@@ -28,14 +30,15 @@ function ListStudents(props) {
       let temp = [];
       const result = await userApi.getUsers();
       temp = [...result.data];
-      setFilteredUsers(temp);
+      const classroomStudents = temp.filter(
+        (user) => user.Classrooms[0] === class_id
+      );
+      setFilteredUsers(classroomStudents);
       setusers(temp);
     } catch (error) {
       console.log("Error getting students list ", error);
     }
   };
-  const {class_id} = props.route.params;
-  console.log({class_id})
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Students</Text>
@@ -55,7 +58,13 @@ function ListStudents(props) {
               <Card
                 title={"Name : " + item.Name}
                 subtitle={"Register No : " + item.RegisterNo}
-                onPress={() => props.navigation.navigate("ListUserDocs",{class_id,student_id:item._id})}
+                style={{ width: 350 }}
+                onPress={() =>
+                  props.navigation.navigate("ListUserDocs", {
+                    class_id,
+                    student_id: item._id,
+                  })
+                }
               />
             )
           }
@@ -72,7 +81,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: "center",
-    backgroundColor: "lightgray",
     padding: 10,
   },
   item: {

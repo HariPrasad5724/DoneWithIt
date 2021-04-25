@@ -21,7 +21,7 @@ const uploadFile2 = async (uri, category, date, filename) => {
   data.append("category", category);
   data.append("date", date);
   data.append("uri", uri);
-  data.append('')
+  data.append("");
 
   apiClient.addAsyncRequestTransform((request) => {
     request.headers["filename"] = filename;
@@ -64,9 +64,11 @@ const getClassroomFiles = async (classId) => {
   }
 };
 
-const getStudentFiles = async (classId,studId) => {
+const getStudentFiles = async (classId, studId) => {
   try {
-    return await apiClient.get(config["studentFilesEndPoint"] + classId + "/" + studId );
+    return await apiClient.get(
+      config["studentFilesEndPoint"] + classId + "/" + studId
+    );
   } catch (error) {
     console.log("Error in getting files from server", Error);
   }
@@ -90,6 +92,10 @@ const downloadFile = async (file) => {
   } catch (error) {
     console.log("Error downloading the file", error);
   }
+};
+
+const deleteFiles = async (fileId) => {
+  return apiClient.delete(config["fileDeleteEndPoint"] + fileId);
 };
 
 const saveFileAsync = async (downloadedFile) => {
@@ -117,4 +123,5 @@ export default {
   saveFileAsync,
   uploadFile,
   getStudentFiles,
+  deleteFiles,
 };
