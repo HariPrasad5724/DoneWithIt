@@ -54,7 +54,7 @@ function ListStudents(props) {
             !item.isStaff && (
               <Card
                 title={"Name : " + item.Name}
-                subtitle={"Register No : " + item._id}
+                subtitle={"Register No : " + item.RegisterNo}
                 onPress={() => props.navigation.navigate("ListUserDocs",{class_id,student_id:item._id})}
               />
             )
