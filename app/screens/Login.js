@@ -26,7 +26,6 @@ function Login(props) {
 
     try {
       const result = await authApi.login(body);
-      console.log(result.ok);
       if (!result.ok) {
         Alert.alert("Invalid Email or Password!!!");
       } else {

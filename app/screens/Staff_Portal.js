@@ -1,8 +1,5 @@
 import React from "react";
-import { render } from "react-dom";
-import { useContext } from "react-native";
 import { ScrollView, View } from "react-native";
-import { roundToNearestPixel } from "react-native/Libraries/Utilities/PixelRatio";
 import Card from "../component/Card";
 
 function Staff_Portal(props) {

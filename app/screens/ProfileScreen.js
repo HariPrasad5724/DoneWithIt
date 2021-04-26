@@ -7,7 +7,7 @@ import authStorage from "../services/authStorage";
 
 function ProfileScreen(props) {
   const { user } = useContext(AuthContext);
-  console.log(user);
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>PROFILE</Text>
@@ -33,7 +33,7 @@ function ProfileScreen(props) {
         color={colors.red}
         style={{ alignSelf: "flex-end" }}
         onPress={() => {
-          props.navigation.navigate("Login");
+          props.navigation.navigate("WelcomeScreen");
           authStorage.removeToken();
         }}
       />

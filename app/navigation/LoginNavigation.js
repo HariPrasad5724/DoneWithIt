@@ -22,12 +22,16 @@ export default function LoginNavigation(props) {
     <NavigationContainer theme={NavigationTheme}>
       <Stack.Navigator>
         <Stack.Screen
-          name="Welcome"
+          name="Login"
+          component={Login}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="WelcomeScreen"
           component={WelcomeScreen}
           options={{ headerShown: false }}
         />
         <Stack.Screen name="OD_Form" component={ReasonODForm} />
-        <Stack.Screen name="Login" component={Login} />
         <Stack.Screen name="Display_Class" component={ListClasses} />
         <Stack.Screen name="Student_Portal" component={Student_Portal} />
         <Stack.Screen name="Staff_Portal" component={Staff_Portal} />
