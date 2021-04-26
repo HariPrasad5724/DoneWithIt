@@ -14,7 +14,8 @@ import DisplayDocs from "../screens/DisplayDocs";
 import ListUserDocs from "../screens/ListUserDocs";
 import ForgotPassword from "../screens/ForgotPassword";
 import NavigationTheme from "./NavigationTheme";
-
+import ProfileScreen from "../screens/ProfileScreen";
+import StaffHome from "../screens/StaffHome";
 const Stack = createStackNavigator();
 
 export default function LoginNavigation(props) {
@@ -39,6 +40,8 @@ export default function LoginNavigation(props) {
         <Stack.Screen name="ListStudents" component={ListStudents} />
         <Stack.Screen name="ListUserDocs" component={ListUserDocs} />
         <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
+        <Stack.Screen name="My_Profile" component={ProfileScreen} />
+        <Stack.Screen name="Staff_Home" component={StaffHome} />
       </Stack.Navigator>
     </NavigationContainer>
   );

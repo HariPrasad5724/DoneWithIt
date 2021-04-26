@@ -34,34 +34,38 @@ function ListClasses(props) {
 
   return (
     <>
-      {classData && (
-        <FlatList
-          style={{ margin: 10 }}
-          data={classData}
-          keyExtractor={(message) => message._id}
-          renderItem={({ item }) => (
-            <Card
-              key={item._id}
-              title={"Class Name : " + item.Name}
-              subtitle={"Batch : " + item.Batch}
-              image={item.image}
-              onPress={() => {
-                setSelectedClass(item._id);
-                console.log(item._id);
-                props.navigation.navigate("Staff_Portal",{class_id:item._id});
-              }}
-              renderRightActions={() => (
-                <ListItemDelete onPress={() => handleDelete(item)} />
-              )}
-            />
-          )}
-          ItemSeparatorComponent={ListItemSeperator}
-          refreshing={refreshing}
-          onRefresh={() => {
-            setClassData(classData);
-          }}
-        />
-      )}
+      <View>
+        {classData && (
+          <FlatList
+            style={{ margin: 10 }}
+            data={classData}
+            keyExtractor={(message) => message._id}
+            renderItem={({ item }) => (
+              <Card
+                key={item._id}
+                title={"Class Name : " + item.Name}
+                subtitle={"Batch : " + item.Batch}
+                image={item.image}
+                onPress={() => {
+                  setSelectedClass(item._id);
+                  console.log(item._id);
+                  props.navigation.navigate("Staff_Portal", {
+                    class_id: item._id,
+                  });
+                }}
+                renderRightActions={() => (
+                  <ListItemDelete onPress={() => handleDelete(item)} />
+                )}
+              />
+            )}
+            ItemSeparatorComponent={ListItemSeperator}
+            refreshing={refreshing}
+            onRefresh={() => {
+              setClassData(classData);
+            }}
+          />
+        )}
+      </View>
     </>
   );
 }
