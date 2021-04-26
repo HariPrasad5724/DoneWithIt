@@ -47,6 +47,7 @@ function ReasonODForm(props) {
         );
         if (result) {
           Alert.alert("File Upload Sucessful!!!!");
+          setdocumentDetails(undefined);
           props.navigation.navigate("Student_Portal");
         } else Alert.alert("Try Again Later!!!");
       } catch (error) {
@@ -63,7 +64,11 @@ function ReasonODForm(props) {
         onSelectItem={(item) => setCategory(item)}
       />
       <AppDatePicker setDateTime={setdate} />
-      <AppButton onPress={readDocument} title={"Add"} color={color.dark} />
+      <AppButton
+        onPress={readDocument}
+        title={"Add Document"}
+        color={color.dark}
+      />
       {documentDetails && (
         <View style={styles.docContainer}>
           <Text style={{ width: 200, fontSize: 16, color: "black" }}>
