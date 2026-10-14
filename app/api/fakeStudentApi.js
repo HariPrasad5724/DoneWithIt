@@ -3,7 +3,7 @@ const Users = [
     _id: "111",
     register_number: "1831016",
     name: "Hari Prasad S A",
-    phone: "9487293830",
+    phone: "6382125605",
     emailid: "hariprasad572415@gmail.com",
     batch: "18MSS",
     documents: "url of the doc",
